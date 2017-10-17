@@ -113,7 +113,7 @@ import java.util.Map;
                                 "upper bound of the approximate answer."
                 ),
                 @Example(
-                        syntax = "define stream sensorStream (sensorId string);\n" +
+                        syntax = "define stream sensorStream (sensorId int);\n" +
                                 "from sensorStream#window.length(1000)\n" +
                                 "#approximate:distinctCount(sensorId, 0.05, 0.65)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +

@@ -98,38 +98,26 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define stream InputStream (someAttribute int);\n" +
-                                "from InputStream#approximate:distinctCountEver(someAttribute)\n" +
+                        syntax = "define stream requestStream (ip string);\n" +
+                                "from requestStream#approximate:distinctCountEver(ip)\n" +
                                 "select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "Distinct count of events in a stream based on someAttribute is " +
-                                "calculated for a default relative error of 0.01 and a default confidence of 0.95. " +
+                        description = "Distinct count of ip addresses which has sent requests is calculated for" +
+                                " a default relative error of 0.01 and a default confidence of 0.95. " +
                                 "Here the distinct count is the number of different values received for " +
-                                "someAttribute. The answers are 95% guaranteed to have a +-1% error " +
+                                "ip attribute. The answers are 95% guaranteed to have a +-1% error " +
                                 "relative to the distinct count. The output will consist of the approximate " +
                                 "distinct count, lower bound and upper bound of the approximate answer."
                 ),
                 @Example(
-                        syntax = "define stream InputStream (some_attribute string);\n" +
-                                "from InputStream#approximate:distinctCountEver(some_attribute, 0.05)\n" +
+                        syntax = "define stream sensorStream (sensorId int);\n" +
+                                "from sensorStream#approximate:distinctCountEver(sensorId, 0.05, 0.65)\n" +
                                 "select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "Distinct count of events in a stream based on someAttribute is " +
-                                "calculated for a relative error of 0.05 and a default confidence of 0.95. " +
+                        description = "Distinct count of sensors which has sent data to the stream is calculated " +
+                                "for a relative error of 0.05 and a confidence of 0.65. " +
                                 "Here the distinct count is the number of different values received for " +
-                                "someAttribute. The answers are 95% guaranteed to have a +-5% error " +
-                                "relative to the distinct count. The output will consist of the approximate " +
-                                "distinct count, lower bound and upper bound of the approximate answer."
-                ),
-                @Example(
-                        syntax = "define stream InputStream (someAttribute double);\n" +
-                                "from InputStream#approximate:distinctCountEver(someAttribute, 0.05, 0.65)\n" +
-                                "select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound\n" +
-                                "insert into OutputStream;\n",
-                        description = "distinctCount of events in a stream based on someAttribute is " +
-                                "calculated for a relative error of 0.05 and a confidence of 0.65 ." +
-                                "Here the distinct count is the number of different values received for " +
-                                "someAttribute. The answers are 65% guaranteed to have a +-5% error " +
+                                "sensorId attribute. The answers are 65% guaranteed to have a +-5% error " +
                                 "relative to the distinct count. The output will consist of the approximate " +
                                 "distinct count, lower bound and upper bound of the approximate answer."
 
