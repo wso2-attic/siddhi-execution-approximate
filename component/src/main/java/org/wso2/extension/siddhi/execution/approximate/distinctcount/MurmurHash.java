@@ -1,6 +1,5 @@
 package org.wso2.extension.siddhi.execution.approximate.distinctcount;
 
-import java.nio.charset.Charset;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -18,6 +17,8 @@ import java.nio.charset.Charset;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
+import java.nio.charset.Charset;
 
 /**
  * This is a very fast, non-cryptographic hash suitable for general hash-based
@@ -48,6 +49,59 @@ public final class MurmurHash {
         } else {
             return hash(o.toString());
         }
+    }
+
+    public static int hash(byte[] data) {
+        return hash(data, data.length, -1);
+    }
+
+    public static int hash(byte[] data, int length, int seed) {
+        int m = 0x5bd1e995;
+        int r = 24;
+
+        int h = seed ^ length;
+
+        int len4 = length >> 2;
+
+        for (int i = 0; i < len4; i++) {
+            int i4 = i << 2;
+            int k = data[i4 + 3];
+            k = k << 8;
+            k = k | (data[i4 + 2] & 0xff);
+            k = k << 8;
+            k = k | (data[i4 + 1] & 0xff);
+            k = k << 8;
+            k = k | (data[i4 + 0] & 0xff);
+            k *= m;
+            k ^= k >>> r;
+            k *= m;
+            h *= m;
+            h ^= k;
+        }
+
+        // avoid calculating modulo
+        int lenM = len4 << 2;
+        int left = length - lenM;
+
+        if (left != 0) {
+            if (left >= 3) {
+                h ^= (int) data[length - 3] << 16;
+            }
+            if (left >= 2) {
+                h ^= (int) data[length - 2] << 8;
+            }
+            if (left >= 1) {
+                h ^= (int) data[length - 1];
+            }
+
+            h *= m;
+        }
+
+        h ^= h >>> 13;
+        h *= m;
+        h ^= h >>> 15;
+
+        return h;
     }
 
     public static int hashLong(long data) {

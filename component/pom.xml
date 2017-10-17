@@ -129,7 +129,9 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.extension.siddhi.execution.priority.*
+                            org.wso2.extension.siddhi.execution.approximate.count.*,
+                            org.wso2.extension.siddhi.execution.approximate.distinctcount.*,
+                            org.wso2.extension.siddhi.execution.approximate.distinctcountever.*
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional

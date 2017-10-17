@@ -83,7 +83,7 @@ insert into OutputStream;
 
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
-define stream sensorStream (sensorId string);
+define stream sensorStream (sensorId int);
 from sensorStream#window.length(1000)
 #approximate:distinctCount(sensorId, 0.05, 0.65)
 select distinctCount, distinctCountLowerBound, distinctCountUpperBound
@@ -250,31 +250,21 @@ approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> va
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
-define stream InputStream (someAttribute int);
-from InputStream#approximate:distinctCountEver(someAttribute)
+define stream requestStream (ip string);
+from requestStream#approximate:distinctCountEver(ip)
 select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
 insert into OutputStream;
 
 ```
-<p style="word-wrap: break-word">Distinct count of events in a stream based on someAttribute is calculated for a default relative error of 0.01 and a default confidence of 0.95. Here the distinct count is the number of different values received for someAttribute. The answers are 95% guaranteed to have a +-1% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
+<p style="word-wrap: break-word">Distinct count of ip addresses which has sent requests is calculated for a default relative error of 0.01 and a default confidence of 0.95. Here the distinct count is the number of different values received for ip attribute. The answers are 95% guaranteed to have a +-1% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
 
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
-define stream InputStream (some_attribute string);
-from InputStream#approximate:distinctCountEver(some_attribute, 0.05)
+define stream sensorStream (sensorId int);
+from sensorStream#approximate:distinctCountEver(sensorId, 0.05, 0.65)
 select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
 insert into OutputStream;
 
 ```
-<p style="word-wrap: break-word">Distinct count of events in a stream based on someAttribute is calculated for a relative error of 0.05 and a default confidence of 0.95. Here the distinct count is the number of different values received for someAttribute. The answers are 95% guaranteed to have a +-5% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
-
-<span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span>
-```
-define stream InputStream (someAttribute double);
-from InputStream#approximate:distinctCountEver(someAttribute, 0.05, 0.65)
-select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
-insert into OutputStream;
-
-```
-<p style="word-wrap: break-word">distinctCount of events in a stream based on someAttribute is calculated for a relative error of 0.05 and a confidence of 0.65 .Here the distinct count is the number of different values received for someAttribute. The answers are 65% guaranteed to have a +-5% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
+<p style="word-wrap: break-word">Distinct count of sensors which has sent data to the stream is calculated for a relative error of 0.05 and a confidence of 0.65. Here the distinct count is the number of different values received for sensorId attribute. The answers are 65% guaranteed to have a +-5% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
 

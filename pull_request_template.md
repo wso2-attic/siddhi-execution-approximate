@@ -8,7 +8,7 @@
 ## Approach
 > N/A
 
-## User stories>
+## User stories
 * Approximate Distinct Count Stream Extension
     * Used to find the approximate distinct count of events in a window of a Siddhi event stream specifying the relative error and confidence to be maintained.
 * Approximate Distinct Count Ever Stream Extension
@@ -34,7 +34,7 @@
 
 ## Automation tests
  - Unit tests
-   > Code coverage = 82%
+   > Code coverage = 83%
  - Integration tests
    > N/A
 
@@ -43,7 +43,7 @@
  - Ran FindSecurityBugs plugin and verified report? yes
  - Confirmed that this PR doesn't commit any keys, passwords, tokens, usernames, or other secrets? yes
 
-## Samples>
+## Samples
 * Calculate the approximate distinct number of ip addresses which has sent requests within the last 1 min.
 * Calculate the approximate distinct number of sensors which has sent data to a stream up to now.
 * Calculate the approximate number of transactions done by different users out of all the last 1000 transactions.

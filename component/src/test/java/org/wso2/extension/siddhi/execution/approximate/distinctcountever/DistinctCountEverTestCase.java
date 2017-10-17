@@ -28,11 +28,11 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_1() throws InterruptedException {
-        final double relativeError = 0.01;
+        final float relativeError = 0.01f;
         final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Ever Test Case - default relative error(" + relativeError + ") " +
-                "and confidence(" + confidence + ")");
+                "and confidence(" + confidence + ") - int input");
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String inStreamDefinition = "define stream inputStream (number int);";
@@ -68,6 +68,180 @@ public class DistinctCountEverTestCase {
 
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+
+        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertTrue(eventArrived);
+
+
+//      confidence check
+        Assert.assertTrue((double) validCount / totalCount >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testApproximateCardinality_111() throws InterruptedException {
+        final float relativeError = 0.05f;
+        final double confidence = 0.99;
+
+        LOG.info("Approximate Distinct Count Ever Test Case - specified relative error(" + relativeError + ") " +
+                "and confidence(" + confidence + ") - string input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number string);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#approximate:distinctCountEver(number," + relativeError +
+                ", " + confidence + ") " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            long lowerBound;
+            long upperBound;
+
+            @Override
+            public void receive(Event[] events) {
+//                EventPrinter.print(events);
+                for (Event event : events) {
+                    totalCount++;
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+                    if (totalCount >= lowerBound && totalCount <= upperBound) {
+                        validCount++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+
+        for (int j = 0; j < noOfEvents; j++) {
+            inputHandler.send(new Object[]{j + ""});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+
+        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertTrue(eventArrived);
+
+
+//      confidence check
+        Assert.assertTrue((double) validCount / totalCount >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testApproximateCardinality_112() throws InterruptedException {
+        final float relativeError = 0.001f;
+        final double confidence = 0.99;
+
+        LOG.info("Approximate Distinct Count Ever Test Case - specified relative error(" + relativeError + ") " +
+                "and confidence(" + confidence + ") - double input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number double);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#approximate:distinctCountEver(number," + relativeError +
+                ", " + confidence + ") " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            long lowerBound;
+            long upperBound;
+
+            @Override
+            public void receive(Event[] events) {
+//                EventPrinter.print(events);
+                for (Event event : events) {
+                    totalCount++;
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+                    if (totalCount >= lowerBound && totalCount <= upperBound) {
+                        validCount++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+
+        for (int j = 0; j < noOfEvents; j++) {
+            inputHandler.send(new Object[]{(double) j});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+
+        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertTrue(eventArrived);
+
+
+//      confidence check
+        Assert.assertTrue((double) validCount / totalCount >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testApproximateCardinality_113() throws InterruptedException {
+        final double relativeError = 0.03;
+        final double confidence = 0.99;
+
+        LOG.info("Approximate Distinct Count Ever Test Case - specified relative error(" + relativeError + ") " +
+                "and confidence(" + confidence + ") - long input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number long);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#approximate:distinctCountEver(number," + relativeError +
+                ", " + confidence + ") " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            long lowerBound;
+            long upperBound;
+
+            @Override
+            public void receive(Event[] events) {
+//                EventPrinter.print(events);
+                for (Event event : events) {
+                    totalCount++;
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+                    if (totalCount >= lowerBound && totalCount <= upperBound) {
+                        validCount++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+
+        for (int j = 0; j < noOfEvents; j++) {
+            inputHandler.send(new Object[]{(long) j});
             Thread.sleep(1);
         }
 
