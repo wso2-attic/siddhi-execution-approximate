@@ -30,6 +30,16 @@ Find some useful links below:
      </dependency>
 ```
 
+## Jenkins Build Status
+
+---
+
+| Branch | Build Status |
+| :------ |:------------ |
+| master | [![Build Status](https://wso2.org/jenkins/job/siddhi/job/siddhi-execution-approximate/badge/icon)](https://wso2.org/jenkins/job/siddhi/job/siddhi-execution-approximate/) |
+
+---
+
 ## Features
 
 
