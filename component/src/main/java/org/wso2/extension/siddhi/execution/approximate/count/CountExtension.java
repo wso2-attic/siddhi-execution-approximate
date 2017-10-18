@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * performs Count-Min Sketch algorithm to get the approximate count(frequency) of events in a window.
+ * Performs Count-Min Sketch algorithm to get the approximate count(frequency) of events in a window.
  */
 @Extension(
         name = "count",

@@ -9,9 +9,8 @@ Find some useful links below:
 
 ## Latest API Docs
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.2-SNAPSHOT">1.0.2-SNAPSHOT</a>.
 
-## How to use 
+## How to use
 
 **Using the extension in <a target="_blank" href="https://github.com/wso2/product-sp">WSO2 Stream Processor</a>**
 
