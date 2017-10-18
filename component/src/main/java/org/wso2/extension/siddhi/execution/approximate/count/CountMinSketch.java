@@ -50,8 +50,6 @@ public class CountMinSketch<E> implements Serializable {
 
     /**
      * Instantiate the count min sketch based on a given relative error and confidence
-     * approximate_answer - (relativeError * numberOfInsertions) <= actual_answer
-     * <= approximate_answer + (relativeError * numberOfInsertions)
      *
      * @param relativeError is a positive number less than 1 (e.g. 0.01)
      * @param confidence    is a positive number less than 1 (e.g. 0.01)
@@ -114,7 +112,7 @@ public class CountMinSketch<E> implements Serializable {
      * compute indices in the range of [0, width) from those hash values
      * increment each value in the cell of relevant row and index (e.g. countArray[row][index]++)
      *
-     * @param item
+     * @param item is the item to be inserted
      * @return the approximate count of the item
      */
     public synchronized long insert(E item) {
@@ -140,7 +138,7 @@ public class CountMinSketch<E> implements Serializable {
      * compute indices in the range of [0, width) from those hash values
      * decrement each value in the cell of relevant row and index (e.g. countArray[row][index]--)
      *
-     * @param item
+     * @param item is the item to be inserted
      * @return the approximate count of the item
      */
     public synchronized long remove(E item) {
@@ -163,10 +161,8 @@ public class CountMinSketch<E> implements Serializable {
 
     /**
      * Calculate the confidence interval of the approximate count
-     * approximateCount - (totalNoOfItems * relativeError) <= exactCount
-     * <= approximateCount + (totalNoOfItems * relativeError)
-     *
-     * @param count
+     * [approximateCount - (totalNoOfItems * relativeError), approximateCount + (totalNoOfItems * relativeError)]
+     * @param count is the approximate count
      * @return a long array which contains the lower bound and
      * the upper bound of the confidence interval consecutively
      */
