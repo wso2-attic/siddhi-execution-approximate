@@ -17,11 +17,10 @@
     * Used to find the approximate count(frequency) of events in a window of a Siddhi event stream based on a specific attribute specifying the relative error and confidence to be maintained.
 
 ## Release note
-> Brief description of the new feature or bug fix as it will appear in the release notes
+> The siddhi-execution-approximate is an extension to Siddhi that performs approximate computing on event streams.
 
 ## Documentation
-> Link(s) to product documentation that addresses the changes of this PR. If no doc impact, enter “N/A” plus brief explanation of why there’s no doc impact
-
+> N/A
 
 ## Training
 > N/A
