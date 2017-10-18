@@ -1,68 +1,52 @@
 ## Purpose
-> If the user needs to calculate the distinct count and count of events in Siddhi streams
-quickly with less memory utilization with agreed upon accuracy levels(less than 100%)
-compared to the applicable naive approaches(in which, the accuracy is 100%),
-the approximate computing approaches can be used.
+> Describe the problems, issues, or needs driving this feature/fix and include links to related issues in the following format: Resolves issue1, issue2, etc.
 
 ## Goals
-> Two approximate computing algorithms are implemented as Siddhi extensions which
-allow the users to specify the accuracy levels and calculate distinct counts and counts of events in Siddhi streams.
+> Describe the solutions that this feature/fix will introduce to resolve the problems described above
 
 ## Approach
-> N/A
+> Describe how you are implementing the solutions. Include an animated GIF or screenshot if the change affects the UI (email documentation@wso2.com to review all UI text). Include a link to a Markdown file or Google doc if the feature write-up is too long to paste here.
 
 ## User stories
-* Approximate Distinct Count Stream Extension
-    * Used to find the approximate distinct count of events in a window of a Siddhi event stream specifying the relative error and confidence which control the accuracy to be maintained.
-* Approximate Distinct Count Ever Stream Extension
-    * Used to find the approximate distinct count of events in a Siddhi event stream specifying the relative error and confidence which control the accuracy to be maintained.
-* Approximate Count Stream Extension
-    * Used to find the approximate count(frequency) of events in a window of a Siddhi event stream based on a specific attribute specifying the relative error and confidence which control the accuracy to be maintained.
+> Summary of user stories addressed by this change>
 
 ## Release note
-> Approximate computing is a way of obtaining approximate results for specific calculations with significant savings of
- system resources and time. The siddhi-execution-approximate extension is an extension to Siddhi that is used to
- incorporate approximate computing functionalities to Siddhi queries. This release of
- siddhi-execution-approximate extension includes two approximation algorithms for
- approximate count of distinct elements and for approximate count of events based on a specific attribute.
+> Brief description of the new feature or bug fix as it will appear in the release notes
 
 ## Documentation
-> N/A
+> Link(s) to product documentation that addresses the changes of this PR. If no doc impact, enter “N/A” plus brief explanation of why there’s no doc impact
 
 ## Training
-> N/A
+> Link to the PR for changes to the training content in https://github.com/wso2/WSO2-Training, if applicable
 
 ## Certification
-> N/A
+> Type “Sent” when you have provided new/updated certification questions, plus four answers for each question (correct answer highlighted in bold), based on this change. Certification questions/answers should be sent to certification@wso2.com and NOT pasted in this PR. If there is no impact on certification exams, type “N/A” and explain why.
 
 ## Marketing
-> N/A
+> Link to drafts of marketing content that will describe and promote this feature, including product page changes, technical articles, blog posts, videos, etc., if applicable
 
 ## Automation tests
- - Unit tests
-   > Code coverage = 83%
+ - Unit tests 
+   > Code coverage information
  - Integration tests
-   > N/A
+   > Details about the test cases and coverage
 
 ## Security checks
- - Followed secure coding standards in http://wso2.com/technical-reports/wso2-secure-engineering-guidelines? yes
- - Ran FindSecurityBugs plugin and verified report? yes
- - Confirmed that this PR doesn't commit any keys, passwords, tokens, usernames, or other secrets? yes
+ - Followed secure coding standards in http://wso2.com/technical-reports/wso2-secure-engineering-guidelines? yes/no
+ - Ran FindSecurityBugs plugin and verified report? yes/no
+ - Confirmed that this PR doesn't commit any keys, passwords, tokens, usernames, or other secrets? yes/no
 
 ## Samples
-* Calculate the approximate distinct number of IP addresses which has sent requests within the last 1 min.
-* Calculate the approximate distinct number of sensors which has sent data to a stream up to now.
-* Calculate the approximate number of transactions done by different users out of all the last 1000 transactions.
+> Provide high-level details about the samples related to this feature
 
 ## Related PRs
 > List any other related PRs
-> N/A
 
 ## Migrations (if applicable)
-> N/A
+> Describe migration steps and platforms on which migration has been tested
 
 ## Test environment
-> JDK version : 1.8.0_131, operating system : ubuntu 16.04
+> List all JDK versions, operating systems, databases, and browser/versions on which this feature/fix was tested
  
 ## Learning
-> N/A
+> Describe the research phase and any blog posts, patterns, libraries, or add-ons you used to solve the problem.
