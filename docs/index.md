@@ -9,9 +9,9 @@ Find some useful links below:
 
 ## Latest API Docs
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0-SNAPSHOT">1.0.0-SNAPSHOT</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0">1.0.0</a>.
 
-## How to use 
+## How to use
 
 **Using the extension in <a target="_blank" href="https://github.com/wso2/product-sp">WSO2 Stream Processor</a>**
 
@@ -33,9 +33,9 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.2-SNAPSHOT/#distinctcountever-stream-processor">distinctCountEver</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Performs HyperLogLog algorithm on a streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events.</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.2-SNAPSHOT/#count-stream-processor">count</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Performs Count-min-sketch algorithm on a window of streaming data set based on a specific relative error and  a confidence value to calculate the approximate count(frequency) of events.</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.2-SNAPSHOT/#distinctcount-stream-processor">distinctCount</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processors">Stream Processor</a>)*<br><div style="padding-left: 1em;"><p>Performs HyperLogLog algorithm on a window of streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0/#distinctcountever-stream-processor">distinctCountEver</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>Performs HyperLogLog algorithm on a streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events. If used with a window, errorneous results will be returned. For usage with the window, use the approximate:distinctCount extension.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0/#distinctcount-stream-processor">distinctCount</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>Performs HyperLogLog algorithm on a window of streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events. If used without a window, the out of memory errors will occur. For usage without the window, use the approximate:distinctCountEver extension.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0/#count-stream-processor">count</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>Performs Count-min-sketch algorithm on a window of streaming data set based on a specific relative error and  a confidence value to calculate the approximate count(frequency) of events. Using without a window may return out of memory errors.</p></div>
 
 ## How to Contribute
  
