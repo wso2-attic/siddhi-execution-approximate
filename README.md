@@ -31,6 +31,16 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
      </dependency>
 ```
 
+## Jenkins Build Status
+
+---
+
+| Branch | Build Status |
+| :------ |:------------ |
+| master | [![Build Status](https://wso2.org/jenkins/job/siddhi/job/siddhi-execution-approximate/badge/icon)](https://wso2.org/jenkins/job/siddhi/job/siddhi-execution-approximate/) |
+
+---
+
 ## Features
 
 * <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-approximate/api/1.0.0/#distinctcountever-stream-processor">distinctCountEver</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>)*<br><div style="padding-left: 1em;"><p>Performs HyperLogLog algorithm on a streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events. If used with a window, errorneous results will be returned. For usage with the window, use the approximate:distinctCount extension.</p></div>
