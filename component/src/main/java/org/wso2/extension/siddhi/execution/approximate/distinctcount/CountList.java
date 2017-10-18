@@ -36,7 +36,7 @@ public class CountList implements Serializable {
     /**
      * Add new value to the counts if the previous values are greater than or equal to the new value.
      *
-     * @param newValue
+     * @param newValue is the new value to be inserted
      * @return {@code true} if the newValue is added, {@code false} if the newValue is not added
      */
     public boolean add(int newValue) {
@@ -62,7 +62,7 @@ public class CountList implements Serializable {
 
     /**
      * Remove the given value from the counts
-     *
+     * @param value is the value to be removed
      * @return the next count value if the removed value was the first value in the list,
      * -1 if the removed value does not affect the counts, 0 if the list is empty
      */

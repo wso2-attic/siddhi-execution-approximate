@@ -96,12 +96,9 @@ public class HyperLogLog<E> implements Serializable {
      * Calculate the distinctCount(number of unique items in a set)
      * by calculating the harmonic mean of the counts in the buckets.
      * Check for the upper and lower bounds to modify the estimation.
-     * <p>
      * n - number of buckets
      * ci - count of the i th bucket
-     * <p>
      * harmonic count mean = n / ((1/2)^c1 + (1/2)^c2 + ... + (1/2)^cn)
-     * <p>
      * estimated distinctCount = n * estimationFactor * harmonicCountMean
      */
     private void calculateCardinality() {
@@ -162,7 +159,7 @@ public class HyperLogLog<E> implements Serializable {
     /**
      * Adds a new item to the array by hashing and increasing the count of relevant buckets
      *
-     * @param item
+     * @param item is the item to be inserted
      */
     public void addItem(E item) {
         int hash = getHashValue(item);
@@ -201,7 +198,7 @@ public class HyperLogLog<E> implements Serializable {
     /**
      * Removes the given item from the array and restore the distinctCount value by using the previous count.
      *
-     * @param item
+     * @param item is the item to be removed
      */
     public void removeItem(E item) {
         if (pastCountsEnabled) {
