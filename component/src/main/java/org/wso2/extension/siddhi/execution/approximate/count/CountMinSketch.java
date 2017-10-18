@@ -31,7 +31,6 @@ import java.util.Random;
  * @param <E> is the type of data to be counted
  */
 public class CountMinSketch<E> implements Serializable {
-
     private static final long serialVersionUID = -3359695950348163739L;
 
     private int depth;
@@ -49,7 +48,6 @@ public class CountMinSketch<E> implements Serializable {
     //  Error factor of approximation
     private double relativeError;
 
-
     /**
      * Instantiate the count min sketch based on a given relative error and confidence
      * approximate_answer - (relativeError * numberOfInsertions) <= actual_answer
@@ -63,9 +61,7 @@ public class CountMinSketch<E> implements Serializable {
         if (!(relativeError < 1 && relativeError > 0) || !(confidence < 1 && confidence > 0)) {
             throw new IllegalArgumentException("confidence and relativeError must be values in the range (0,1)");
         }
-
         this.totalNoOfItems = 0;
-
         this.relativeError = relativeError;
 
 //      depth = ln(1 / (1 - confidence))
@@ -96,7 +92,6 @@ public class CountMinSketch<E> implements Serializable {
     private int getArrayIndex(int hash) {
         return Math.abs(hash % width);
     }
-
 
     /**
      * Compute a set of different integer hash values for a given item
@@ -136,7 +131,6 @@ public class CountMinSketch<E> implements Serializable {
                 currentMin = countArray[i][index];
             }
         }
-
         return currentMin;
     }
 

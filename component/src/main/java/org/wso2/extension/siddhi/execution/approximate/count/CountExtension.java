@@ -129,9 +129,7 @@ import java.util.Map;
         }
 )
 public class CountExtension extends StreamProcessor {
-
     private CountMinSketch<Object> countMinSketch;
-
     private ExpressionExecutor valueExecutor;
 
     @Override
@@ -140,8 +138,11 @@ public class CountExtension extends StreamProcessor {
                                    SiddhiAppContext siddhiAppContext) {
 
 //      default values for relative error and confidence
-        double relativeError = 0.01;
-        double confidence = 0.99;
+        final double defaultRelativeError = 0.01;
+        final double defaultConfidence = 0.99;
+
+        double relativeError = defaultRelativeError;
+        double confidence = defaultConfidence;
 
 //       validate number of attributes
         if (!(attributeExpressionExecutors.length == 1 || attributeExpressionExecutors.length == 3)) {
@@ -156,7 +157,6 @@ public class CountExtension extends StreamProcessor {
                     this.attributeExpressionExecutors[0].getClass().getCanonicalName());
         }
         valueExecutor = attributeExpressionExecutors[0];
-
 
         //expressionExecutors[1] --> relativeError
         if (attributeExpressionExecutors.length > 1) {
@@ -183,13 +183,11 @@ public class CountExtension extends StreamProcessor {
 
         //expressionExecutors[2] --> confidence
         if (attributeExpressionExecutors.length > 2) {
-
             if (!(attributeExpressionExecutors[2] instanceof ConstantExpressionExecutor)) {
                 throw new SiddhiAppCreationException("The 3rd parameter inside count function - " +
                         "'confidence' has to be a constant but found " +
                         this.attributeExpressionExecutors[2].getClass().getCanonicalName());
             }
-
             if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.DOUBLE ||
                     attributeExpressionExecutors[1].getReturnType() == Attribute.Type.FLOAT) {
                 confidence = (Double) ((ConstantExpressionExecutor) attributeExpressionExecutors[2]).getValue();
@@ -198,7 +196,6 @@ public class CountExtension extends StreamProcessor {
                         "'confidence' should be of type Double or Float but found " +
                         attributeExpressionExecutors[2].getReturnType());
             }
-
             if ((confidence <= 0) || (confidence >= 1)) {
                 throw new SiddhiAppCreationException("The 3rd parameter inside count function - " +
                         "'confidence' must be in the range of (0, 1) but found " + confidence);
@@ -217,7 +214,6 @@ public class CountExtension extends StreamProcessor {
     @Override
     protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor processor,
                            StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
-
         long approximateCount = 0;
         long[] confidenceInterval = new long[2];
 
@@ -236,25 +232,20 @@ public class CountExtension extends StreamProcessor {
                 } else if (streamEvent.getType().equals(StreamEvent.Type.RESET)) {
                     countMinSketch.clear();
                 }
-//              outputData = {count, lower bound, upper bound}
+
                 Object[] outputData = {approximateCount, confidenceInterval[0], confidenceInterval[1]};
 
                 complexEventPopulater.populateComplexEvent(streamEvent, outputData);
             }
         }
-
         nextProcessor.process(streamEventChunk);
     }
 
     @Override
-    public void start() {
-
-    }
+    public void start() { }
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() { }
 
     @Override
     public Map<String, Object> currentState() {

@@ -28,7 +28,6 @@ import java.io.Serializable;
  * @param <E> is the type of objects in the set.
  */
 public class HyperLogLog<E> implements Serializable {
-
     private static final long serialVersionUID = -5295608198644134019L;
 
     private static final double STANDARD_ERROR = 1.04;
@@ -106,7 +105,6 @@ public class HyperLogLog<E> implements Serializable {
      * estimated distinctCount = n * estimationFactor * harmonicCountMean
      */
     private void calculateCardinality() {
-
         double harmonicCountMean;
         long estimatedCardinality;
         long cardinality;

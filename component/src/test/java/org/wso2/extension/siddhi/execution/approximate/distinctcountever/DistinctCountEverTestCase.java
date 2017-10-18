@@ -49,7 +49,6 @@ public class DistinctCountEverTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     lowerBound = (long) event.getData(2);
@@ -65,21 +64,15 @@ public class DistinctCountEverTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j});
             Thread.sleep(1);
         }
-
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
@@ -107,7 +100,6 @@ public class DistinctCountEverTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     lowerBound = (long) event.getData(2);
@@ -123,21 +115,15 @@ public class DistinctCountEverTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j + ""});
             Thread.sleep(1);
         }
-
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
@@ -165,7 +151,6 @@ public class DistinctCountEverTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     lowerBound = (long) event.getData(2);
@@ -181,21 +166,16 @@ public class DistinctCountEverTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{(double) j});
             Thread.sleep(1);
         }
 
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
@@ -223,7 +203,6 @@ public class DistinctCountEverTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     lowerBound = (long) event.getData(2);
@@ -239,24 +218,18 @@ public class DistinctCountEverTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{(long) j});
             Thread.sleep(1);
         }
 
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
-
 
     @Test
     public void testApproximateCardinality_3() throws InterruptedException {
@@ -282,7 +255,6 @@ public class DistinctCountEverTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     cardinality = (long) event.getData(1);
@@ -299,30 +271,23 @@ public class DistinctCountEverTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j});
             Thread.sleep(1);
         }
 
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
 
     @Test
     public void testApproximateCardinality_4() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to check the number of parameters passed " +
                 "to the distinctCountEver function are not 1 or 3");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -347,9 +312,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_5() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 2nd parameter inside" +
                 " distinctCountEver function is a constant");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -375,9 +337,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_6() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 2nd parameter inside distinctCountEver" +
                 " function is a double or float");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -402,9 +361,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_7() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 2nd parameter " +
                 "inside distinctCountEver function is in (0, 1) range");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -429,9 +385,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_8() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 3rd parameter inside distinctCountEver" +
                 " function is a constant");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -457,9 +410,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_9() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 3rd parameter inside distinctCountEver" +
                 " function is a double or float");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -484,9 +434,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_10() throws InterruptedException {
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 3rd parameter " +
                 "inside distinctCountEver function is a value out of 0.65, 0.95, 0.99");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -511,8 +458,6 @@ public class DistinctCountEverTestCase {
 
     @Test
     public void testApproximateCardinality_11() throws InterruptedException {
-        final int windowLength = 1000;
-
         LOG.info("Approximate Distinct Count Ever Test Case - to validate the 1st parameter " +
                 "inside distinctCountEver function is a variable");
         SiddhiManager siddhiManager = new SiddhiManager();

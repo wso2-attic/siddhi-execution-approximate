@@ -26,10 +26,8 @@ public class DistinctCountTestCase {
         eventArrived = false;
     }
 
-
     @Test
     public void testApproximateCardinality_1() throws InterruptedException {
-
         final int windowLength = 500;
         final double relativeError = 0.01;
         final double confidence = 0.95;
@@ -54,7 +52,6 @@ public class DistinctCountTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     if (totalCount < windowLength) {
@@ -62,7 +59,6 @@ public class DistinctCountTestCase {
                     } else {
                         exactCardinality = windowLength;
                     }
-
                     cardinality = (long) event.getData(1);
                     lowerBound = (long) event.getData(2);
                     upperBound = (long) event.getData(3);
@@ -77,26 +73,20 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j});
             Thread.sleep(1);
         }
-
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
     @Test
     public void testApproximateCardinality_111() throws InterruptedException {
-
         final int windowLength = 500;
         final double relativeError = 0.01;
         final double confidence = 0.99;
@@ -123,7 +113,6 @@ public class DistinctCountTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     if (totalCount < windowLength) {
@@ -131,7 +120,6 @@ public class DistinctCountTestCase {
                     } else {
                         exactCardinality = windowLength;
                     }
-
                     cardinality = (long) event.getData(1);
                     lowerBound = (long) event.getData(2);
                     upperBound = (long) event.getData(3);
@@ -146,26 +134,20 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j + ""});
             Thread.sleep(1);
         }
-
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
     @Test
     public void testApproximateCardinality_112() throws InterruptedException {
-
         final int windowLength = 500;
         final double relativeError = 0.01;
         final double confidence = 0.99;
@@ -192,7 +174,6 @@ public class DistinctCountTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     if (totalCount < windowLength) {
@@ -215,26 +196,20 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{(double) j});
             Thread.sleep(1);
         }
-
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
     @Test
     public void testApproximateCardinality_113() throws InterruptedException {
-
         final int windowLength = 500;
         final double relativeError = 0.01;
         final double confidence = 0.99;
@@ -261,7 +236,6 @@ public class DistinctCountTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     if (totalCount < windowLength) {
@@ -269,7 +243,6 @@ public class DistinctCountTestCase {
                     } else {
                         exactCardinality = windowLength;
                     }
-
                     cardinality = (long) event.getData(1);
                     lowerBound = (long) event.getData(2);
                     upperBound = (long) event.getData(3);
@@ -284,27 +257,22 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{(long) j});
             Thread.sleep(1);
         }
 
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
         siddhiAppRuntime.shutdown();
     }
 
 
     @Test
     public void testApproximateCardinality_3() throws InterruptedException {
-
         final int windowLength = 500;
         final double relativeError = 0.05;
         final double confidence = 0.65;
@@ -330,7 +298,6 @@ public class DistinctCountTestCase {
 
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalCount++;
                     if (totalCount < windowLength) {
@@ -353,31 +320,23 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < noOfEvents; j++) {
             inputHandler.send(new Object[]{j});
             Thread.sleep(1);
         }
 
         Thread.sleep(100);
-
         Assert.assertEquals(noOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
-
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
-
-
         siddhiAppRuntime.shutdown();
     }
 
 
     @Test
     public void testApproximateCardinality_4() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case - to check the number of parameters passed " +
                 "to the distinctCount function are not 1 or 3");
@@ -402,10 +361,7 @@ public class DistinctCountTestCase {
 
     @Test
     public void testApproximateCardinality_5() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case -  to validate the 2nd parameter inside distinctCount " +
                 "function is a constant");
@@ -432,10 +388,7 @@ public class DistinctCountTestCase {
 
     @Test
     public void testApproximateCardinality_6() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case - to validate the 2nd parameter inside distinctCount" +
                 " function is a double");
@@ -456,16 +409,12 @@ public class DistinctCountTestCase {
             Assert.assertTrue(e.getCause().getMessage().contains("The 2nd parameter inside distinctCount function" +
                     " - 'relative.error' should be of type Double or Float but found STRING"));
         }
-
         Assert.assertEquals(true, exceptionOccurred);
     }
 
     @Test
     public void testApproximateCardinality_7() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case - to validate the 2nd parameter " +
                 "inside distinctCount function is in (0, 1) range");
@@ -485,16 +434,12 @@ public class DistinctCountTestCase {
             Assert.assertTrue(e.getCause().getMessage().contains("The 2nd parameter inside distinctCount function" +
                     " - 'relative.error' must be in the range of (0, 1) but found 5.31"));
         }
-
         Assert.assertEquals(true, exceptionOccurred);
     }
 
     @Test
     public void testApproximateCardinality_8() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case -  to validate the 3rd parameter inside distinctCount" +
                 " function is a constant");
@@ -515,16 +460,12 @@ public class DistinctCountTestCase {
                     " - 'confidence' has to be a constant but found " +
                     "org.wso2.siddhi.core.executor.VariableExpressionExecutor"));
         }
-
         Assert.assertEquals(true, exceptionOccurred);
     }
 
     @Test
     public void testApproximateCardinality_9() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case - to validate the 3rd parameter inside distinctCount" +
                 " function is a double");
@@ -545,17 +486,12 @@ public class DistinctCountTestCase {
             Assert.assertTrue(e.getCause().getMessage().contains("The 3rd parameter inside distinctCount function" +
                     " - 'confidence' should be of type Double or Float but found STRING"));
         }
-
         Assert.assertEquals(true, exceptionOccurred);
-
     }
 
     @Test
     public void testApproximateCardinality_10() throws InterruptedException {
-
         final int windowLength = 500;
-        final double relativeError = 0.01;
-        final double confidence = 0.95;
 
         LOG.info("Approximate Distinct Count Test Case -  to validate the 3rd parameter " +
                 "inside distinctCount function is a value out of 0.65, 0.95, 0.99");
@@ -575,7 +511,6 @@ public class DistinctCountTestCase {
             Assert.assertTrue(e.getCause().getMessage().contains("The 3rd parameter inside distinctCount function - " +
                     "'confidence' must be a value from 0.65, 0.95 and 0.99 but found 0.66"));
         }
-
         Assert.assertEquals(true, exceptionOccurred);
     }
 
@@ -604,6 +539,5 @@ public class DistinctCountTestCase {
         }
         Assert.assertEquals(true, exceptionOccurred);
     }
-
 }
 

@@ -31,11 +31,9 @@ public class CountTestCase {
         eventArrived = false;
     }
 
-
     @Test
     public void testApproximateCount_1() throws InterruptedException {
         final int windowLength = 1000;
-
         final double confidence = 0.75;
         final double relativeError = 0.005;
 
@@ -55,7 +53,6 @@ public class CountTestCase {
         siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
             @Override
             public void receive(Event[] events) {
-//                EventPrinter.print(events);
                 for (Event event : events) {
                     totalEventsArrived++;
 
@@ -79,7 +76,6 @@ public class CountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-
         for (int j = 0; j < totalEventsSent; j++) {
             inputHandler.send(new Object[]{j % noOfUniqueEvents});
             Thread.sleep(1);
@@ -88,11 +84,7 @@ public class CountTestCase {
         Thread.sleep(100);
         Assert.assertEquals(totalEventsSent, totalEventsArrived);
         Assert.assertTrue(eventArrived);
-
-//      confidence test
-// todo : assert condition - done
         Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
-
 
         siddhiAppRuntime.shutdown();
     }
@@ -101,9 +93,6 @@ public class CountTestCase {
     @Test
     public void testApproximateCount_2() throws InterruptedException {
         final int windowLength = 1000;
-
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
 
         LOG.info("Approximate Count Test Case - to check the number of parameters " +
                 "passed to the count functions are not 1 or 3");
@@ -131,9 +120,6 @@ public class CountTestCase {
     public void testApproximateCount_3() throws InterruptedException {
         final int windowLength = 1000;
 
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
-
         LOG.info("Approximate Count Test Case - to validate the 2nd parameter inside count function is a constant");
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -158,9 +144,6 @@ public class CountTestCase {
     @Test
     public void testApproximateCount_4() throws InterruptedException {
         final int windowLength = 1000;
-
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
 
         LOG.info("Approximate Count Test Case - to validate the 2nd parameter inside " +
                 "count function is a double or float");
@@ -187,9 +170,6 @@ public class CountTestCase {
     public void testApproximateCount_5() throws InterruptedException {
         final int windowLength = 1000;
 
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
-
         LOG.info("Approximate Count Test Case - to validate the 2nd parameter " +
                 "inside count function is in (0, 1) range");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -214,9 +194,6 @@ public class CountTestCase {
     @Test
     public void testApproximateCount_6() throws InterruptedException {
         final int windowLength = 1000;
-
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
 
         LOG.info("Approximate Count Test Case - to validate the 3rd parameter inside count function is a constant");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -243,9 +220,6 @@ public class CountTestCase {
     public void testApproximateCount_7() throws InterruptedException {
         final int windowLength = 1000;
 
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
-
         LOG.info("Approximate Count Test Case - to validate the 3rd parameter " +
                 "inside count function is a double or float");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -271,9 +245,6 @@ public class CountTestCase {
     public void testApproximateCount_8() throws InterruptedException {
         final int windowLength = 1000;
 
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
-
         LOG.info("Approximate Count Test Case - to validate the 3rd parameter " +
                 "inside count function is in (0, 1) range");
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -298,9 +269,6 @@ public class CountTestCase {
     @Test
     public void testApproximateCount_9() throws InterruptedException {
         final int windowLength = 1000;
-
-        final double confidence = 0.75;
-        final double relativeError = 0.005;
 
         LOG.info("Approximate Count Test Case - to validate the 1st parameter " +
                 "inside count function is a variable");

@@ -44,7 +44,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Performs HyperLogLog algorithm to get the approximate distinct count of events in a stream.
  */
@@ -135,8 +134,11 @@ public class DistinctCountEverExtension extends StreamProcessor {
                                    SiddhiAppContext siddhiAppContext) {
 
 //      default values for relative error and confidence
-        double relativeError = 0.01;
-        double confidence = 0.95;
+        final double defaultRelativeError = 0.01;
+        final double defaultConfidence = 0.95;
+
+        double relativeError = defaultRelativeError;
+        double confidence = defaultConfidence;
 
 //       validate number of attributes
         if (!(attributeExpressionExecutors.length == 1 || attributeExpressionExecutors.length == 3)) {
@@ -152,7 +154,6 @@ public class DistinctCountEverExtension extends StreamProcessor {
                     this.attributeExpressionExecutors[0].getClass().getCanonicalName());
         }
         valueExecutor = attributeExpressionExecutors[0];
-
 
         //expressionExecutors[1] --> relativeError
         if (attributeExpressionExecutors.length > 1) {
@@ -227,7 +228,6 @@ public class DistinctCountEverExtension extends StreamProcessor {
                         hyperLogLog.clear();
                     }
 
-//                  outputData = {distinctCount, lower bound, upper bound}
                     Object[] outputData = {hyperLogLog.getCardinality(), hyperLogLog.getConfidenceInterval()[0],
                             hyperLogLog.getConfidenceInterval()[1]};
 
@@ -239,14 +239,10 @@ public class DistinctCountEverExtension extends StreamProcessor {
     }
 
     @Override
-    public void start() {
-
-    }
+    public void start() {}
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 
     @Override
     public Map<String, Object> currentState() {
