@@ -92,7 +92,7 @@ import java.util.Map;
         returnAttributes = {
                 @ReturnAttribute(
                         name = "distinctCount",
-                        description = "This represents the distinct count based on the last event ",
+                        description = "This represents the distinct count based on the last event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
@@ -114,9 +114,9 @@ import java.util.Map;
                                 "from requestStream#window.time(1000)#approximate:distinctCount(ip)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "This query calculates the distinct count of each IP address that has sent " +
-                                "requests within the last 1000 milliseconds. The distinct count is 95% guaranteed " +
-                                "to deviate no more than 1% from the actual distinct count per IP address." +
+                        description = "This query calculates the distinct count of events for each IP address that " +
+                                "has sent requests within the last 1000 milliseconds. The distinct count is 95% " +
+                                "guaranteed to deviate no more than 1% from the actual distinct count per IP address." +
                                 "The output consists of the approximate distinct count, and the lower bound and " +
                                 "upper bound of the approximate answer."
                 ),
@@ -126,11 +126,12 @@ import java.util.Map;
                                 "#approximate:distinctCount(sensorId, 0.05, 0.65)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "This query calculates the distinct count of sensors that have sent data to " +
-                                "the stream. This value is calculated based on the last 1000 events in a sliding " +
-                                "manner. The calculated distinct count is 65% guaranteed to deviate no more than 5%" +
-                                " from the actual distinct count. The output consists of the approximate distinct " +
-                                "count, and the lower bound and upper bound of the approximate answer."
+                        description = "This query calculates the distinct count of events for each sensor that has " +
+                                "sent data to the stream. This value is calculated based on the last 1000 events " +
+                                "in a sliding manner. The calculated distinct count is 65% guaranteed to deviate no " +
+                                "more than 5% from the actual distinct count. The output consists of the " +
+                                "approximate distinct count, and the lower bound and upper bound of the approximate" +
+                                " answer."
                 )
         }
 )
