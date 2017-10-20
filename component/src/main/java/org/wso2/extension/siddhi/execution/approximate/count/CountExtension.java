@@ -49,28 +49,36 @@ import java.util.Map;
 @Extension(
         name = "count",
         namespace = "approximate",
-        description = "Performs Count-min-sketch algorithm on a window of streaming data set based on a specific " +
-                "relative error and  a confidence value to calculate the approximate count(frequency) of events. " +
-                "Using without a window may return out of memory errors.",
+        description = "This extension applies the `Count-min-sketch` algorithm to a Siddhi window. The algorithm is" +
+                " set based on a specific relative error and a confidence value to calculate the approximate " +
+                "count(frequency) of events. " +
+                "Note that using this extension without a window may return out of memory errors.",
         parameters = {
                 @Parameter(
                         name = "value",
-                        description = "The value used to find the count",
+                        description = "The value based on which the count is derived.",
                         type = {DataType.INT, DataType.DOUBLE, DataType.FLOAT, DataType.LONG, DataType.STRING,
                                 DataType.BOOL, DataType.TIME, DataType.OBJECT}
                 ),
                 @Parameter(
                         name = "relative.error",
-                        description = "This is the relative error for which the count is obtained. " +
-                                "The values must be in the range of (0, 1).",
+                        description = "This is the relative error to be allowed for the count generated, expressed " +
+                                "as a value between 0 and 1. A lower value specifies a lower rate by which the count" +
+                                " can deviate from being perfectly correct. If 0 is specified, the count generated" +
+                                " must be perfectly accurate. If 1 is specified, the count is erroneous for certain.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.01"
                 ),
                 @Parameter(
                         name = "confidence",
-                        description = "This is the confidence for which the relative error is true. " +
-                                "The values must be in the range of (0, 1).",
+                        description = " This is the level confidence with which the specified relative error can " +
+                                "be considered, specified as a rate. Higher value indicates that the " +
+                                "possibility of the actual deviation of the count from the accurate count is equal " +
+                                "to the relative error specified can be considered with greater certainty. If 1 is " +
+                                "specified, it can be considered with certainty that the count is generated with " +
+                                "the specified rate of relative error. If 0 is specified, there is no certainty " +
+                                "that the count is generated with the specified level of error.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.99"
@@ -79,19 +87,20 @@ import java.util.Map;
         returnAttributes = {
                 @ReturnAttribute(
                         name = "count",
-                        description = "Represents the approximate count per attribute considering the latest event",
+                        description = "This represents the approximate count per attribute based on the latest " +
+                                "event",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "countLowerBound",
-                        description = "Represents the lower bound of the count per attribute" +
-                                " considering the latest event",
+                        description = "The lowest value in the range within which the most accurate count for the " +
+                                "attribute is included This count rane is based on the latest event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "countUpperBound",
-                        description = "Represents the upper bound of the count per attribute " +
-                                "considering the latest event",
+                        description = "The highest value in the range within which the most accurate count for the " +
+                                "attribute is included This count rane is based on the latest event.",
                         type = {DataType.LONG}
                 )
         },
@@ -102,28 +111,24 @@ import java.util.Map;
                                 "from requestStream#window.time(1000)#approximate:count(ip)\n" +
                                 "select count, countLowerBound, countUpperBound\n" +
                                 "insert into OutputStream;",
-                        description = "Count(frequency) of requests from different ip addresses" +
-                                " in a time window is calculated for a default relative error of 0.01 " +
+                        description = "This query generates the count(frequency) of requests from different IP " +
+                                "addresses in a time window is calculated with a default relative error of 0.01 " +
                                 "and a default confidence of 0.99. " +
-                                "Here the counts are calculated considering only the events belong" +
-                                " to the last 1000 ms. The answers are 99% guaranteed to have a +-1% error " +
-                                "relative to the total event count within the window. " +
-                                "The output will consist of the " +
-                                "approximate count of the latest event, lower bound and " +
-                                "upper bound of the approximate answer."
+                                "Here, only the events that arrive during the last 1000 milliseconds are considered" +
+                                " when calculating the counts. The counts generated are 99% guaranteed to deviate " +
+                                "from the actual count within the window by only 1%. The output consists of the " +
+                                "approximate count of the latest event, lower bound and upper bound of the " +
+                                "approximate answer."
                 ),
                 @Example(
                         syntax = "define stream transactionStream (userId int, amount double);\n" +
                                 "from transactionStream#window.length(1000)#approximate:count(userId, 0.05, 0.9)\n" +
                                 "select count, countLowerBound, countUpperBound\n" +
                                 "insert into OutputStream;",
-                        description = "Count(frequency) of transactions done by different users out of " +
-                                "last 1000 transactions based on the userId is " +
-                                "calculated for an relative error of 0.05 and a confidence of 0.9. " +
-                                "Here the counts are calculated considering only the last 1000 events arrived. " +
-                                "The answers are 90% guaranteed to have a +-5%The answers are 99% guaranteed to " +
-                                "have a +-5% error relative to the total event count within the window." +
-                                "The output will consist of the approximate count of the latest event, " +
+                        description = "This query generates the count(frequency) of transactions for each user ID " +
+                                "based on the last 1000 transactions (i.e., events). The counts generated are 90% " +
+                                "guaranteed to deviate from the actual event count within the window by only 5%." +
+                                "The output consists of the approximate count of the latest events, " +
                                 "lower bound and upper bound of the approximate answer."
                 )
         }
