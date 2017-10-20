@@ -50,30 +50,40 @@ import java.util.Map;
 @Extension(
         name = "distinctCount",
         namespace = "approximate",
-        description = "Performs HyperLogLog algorithm on a window of streaming data set based on a " +
-                "specific relative error" +
-                " and a confidence value to calculate the number of distinct events. " +
-                "If used without a window, the out of memory errors will occur. " +
-                "For usage without the window, use the approximate:distinctCountEver extension.",
+        description = "This applies the HyperLogLog algorithm to a Siddhi window. The algorithm is set with a " +
+                "relative error and a confidence value to calculate the number of distinct events with an accepted " +
+                "level of accuracy. Note that if this extension is used without a window, it may cause out of memory" +
+                " errors. If you need to perform these calculations without windows, use the " +
+                "`approximate:distinctCountEver` extension.",
         parameters = {
                 @Parameter(
                         name = "value",
-                        description = "The value used to find distinctCount",
+                        description = "The value based on which the `distinctCount` is calculated.",
                         type = {DataType.INT, DataType.DOUBLE, DataType.FLOAT, DataType.LONG, DataType.STRING,
                                 DataType.BOOL, DataType.TIME, DataType.OBJECT}
                 ),
                 @Parameter(
                         name = "relative.error",
-                        description = "This is the relative error for which the distinct count is obtained. " +
-                                "The values must be in the range of (0, 1).",
+                        description = "This is the relative error to be allowed for the distinct count generated, " +
+                                "expressed as a value between 0 and 1. Lower the value specified, lower is the " +
+                                "rate by which the distinct count can deviate from being perfectly correct. If 0.01" +
+                                " is specified, the distinct count generated must be almost perfectly accurate. If " +
+                                "0.99 is specified, the minimal level of accuracy is expected. Note that you cannot " +
+                                "specify `1` or `0` as the value for this parameter.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.01"
                 ),
                 @Parameter(
                         name = "confidence",
-                        description = "This is the confidence for which the relative error is true. " +
-                                "The value must be one out of 0.65, 0.95, 0.99.",
+                        description =  "This is the level confidence with which the specified relative error can " +
+                                "be considered, specified as a rate. Higher the value specified, higher is the " +
+                                "possibility of the amount of error in the distinct count being no greater than " +
+                                "the relative error specified. If 0.99 is specified, it can be almost considered " +
+                                "with certainty that the distinct count is generated with the specified rate of " +
+                                "relative error. If 0.01 is specified, there can be minimal certainty as to whether" +
+                                " the distinct count is generated with the specified rate of error. The possible " +
+                                "values are `0.65`, `0.95`, `0.99`.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.95"
@@ -82,17 +92,19 @@ import java.util.Map;
         returnAttributes = {
                 @ReturnAttribute(
                         name = "distinctCount",
-                        description = "Represents the distinct count considering the last event ",
+                        description = "This represents the distinct count based on the last event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "distinctCountLowerBound",
-                        description = "Represents the lower bound of the distinct count considering the last event",
+                        description = "The lowest value in the range within which the most accurate distinct count " +
+                                "for the attribute is included This distinct count range is based on the latest event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "distinctCountUpperBound",
-                        description = "Represents the upper bound of the distinct count considering the last event",
+                        description = "The highest value in the range within which the most accurate distinct count " +
+                                "for the attribute is included This distinct count range is based on the latest event.",
                         type = {DataType.LONG}
                 )
         },
@@ -102,14 +114,10 @@ import java.util.Map;
                                 "from requestStream#window.time(1000)#approximate:distinctCount(ip)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "Distinct count of ip addresses which has sent requests within the " +
-                                "last 1000ms is calculated for a default relative error of 0.01" +
-                                " and a default confidence of 0.95. " +
-                                "Here the distinct count is the number of different values received for " +
-                                "ip attribute considering the events received within last 1000ms time period. " +
-                                "The answers are 95% guaranteed to have a +-1% error relative to the " +
-                                "distinct count. " +
-                                "The output will consist of the approximate distinct count, lower bound and " +
+                        description = "This query calculates the distinct count of events for each IP address that " +
+                                "has sent requests within the last 1000 milliseconds. The distinct count is 95% " +
+                                "guaranteed to deviate no more than 1% from the actual distinct count per IP address." +
+                                "The output consists of the approximate distinct count, and the lower bound and " +
                                 "upper bound of the approximate answer."
                 ),
                 @Example(
@@ -118,15 +126,12 @@ import java.util.Map;
                                 "#approximate:distinctCount(sensorId, 0.05, 0.65)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
-                        description = "Distinct count of sensors which has sent data to the stream " +
-                                "out of last 1000 events is " +
-                                "calculated for a relative error of 0.05 and a confidence of 0.65. " +
-                                "Here the distinct count is the number of different values values received " +
-                                "for sensorId attribute in the last 1000 events. " +
-                                "The answers are 65% guaranteed to have a +-5% error relative to the " +
-                                "distinct count. " +
-                                "The output will consist of the approximate distinct count, lower bound and " +
-                                "upper bound of the approximate answer."
+                        description = "This query calculates the distinct count of events for each sensor that has " +
+                                "sent data to the stream. This value is calculated based on the last 1000 events " +
+                                "in a sliding manner. The calculated distinct count is 65% guaranteed to deviate no " +
+                                "more than 5% from the actual distinct count. The output consists of the " +
+                                "approximate distinct count, and the lower bound and upper bound of the approximate" +
+                                " answer."
                 )
         }
 )
