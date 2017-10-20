@@ -63,22 +63,25 @@ import java.util.Map;
                 @Parameter(
                         name = "relative.error",
                         description = "This is the relative error to be allowed for the count generated, expressed " +
-                                "as a value between 0 and 1. A lower value specifies a lower rate by which the count" +
-                                " can deviate from being perfectly correct. If 0 is specified, the count generated" +
-                                " must be perfectly accurate. If 1 is specified, the count is erroneous for certain.",
+                                "as a value between 0 and 1. Lower the value specified, lower is the rate by which " +
+                                "the count can deviate from being perfectly correct. If 0.01 is specified, the count " +
+                                "generated must be almost perfectly accurate. If 0.99 is specified, the minimal " +
+                                "level of accuracy is expected. Note that you cannot specify `1` or `0` as the value " +
+                                "for this parameter.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.01"
                 ),
                 @Parameter(
                         name = "confidence",
-                        description = " This is the level confidence with which the specified relative error can " +
-                                "be considered, specified as a rate. Higher value indicates that the " +
-                                "possibility of the actual deviation of the count from the accurate count is equal " +
-                                "to the relative error specified can be considered with greater certainty. If 1 is " +
-                                "specified, it can be considered with certainty that the count is generated with " +
-                                "the specified rate of relative error. If 0 is specified, there is no certainty " +
-                                "that the count is generated with the specified level of error.",
+                        description = "This is the level confidence with which the specified relative error can " +
+                                "be considered, specified as a rate. Higher the value specified, higher is the " +
+                                "possibility of the amount of error in the count being no greater than the relative " +
+                                "error specified. If 0.99 is specified, it can be almost considered with certainty " +
+                                "that the count is generated with the specified rate of relative error. If 0.01 is" +
+                                " specified, there can be minimal certainty as to whether the count is generated " +
+                                "with the specified rate of error. Note that you cannot specify `1` or `0` as the " +
+                                "value for this parameter.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.99"
@@ -94,13 +97,13 @@ import java.util.Map;
                 @ReturnAttribute(
                         name = "countLowerBound",
                         description = "The lowest value in the range within which the most accurate count for the " +
-                                "attribute is included This count rane is based on the latest event.",
+                                "attribute is included This count range is based on the latest event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "countUpperBound",
                         description = "The highest value in the range within which the most accurate count for the " +
-                                "attribute is included This count rane is based on the latest event.",
+                                "attribute is included This count range is based on the latest event.",
                         type = {DataType.LONG}
                 )
         },

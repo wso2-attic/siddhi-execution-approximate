@@ -31,7 +31,7 @@ approximate:count(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE
     </tr>
     <tr>
         <td style="vertical-align: top">relative.error</td>
-        <td style="vertical-align: top; word-wrap: break-word">This is the relative error to be allowed for the count generated, expressed as a value between 0 and 1. A lower value specifies a lower rate by which the count can deviate from being perfectly correct. If 0 is specified, the count generated must be perfectly accurate. If 1 is specified, the count is erroneous for certain.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the relative error to be allowed for the count generated, expressed as a value between 0 and 1. Lower the value specified, lower is the rate by which the count can deviate from being perfectly correct. If 0.01 is specified, the count generated must be almost perfectly accurate. If 0.99 is specified, the minimal level of accuracy is expected. Note that you cannot specify <code>1</code> or <code>0</code> as the value for this parameter.</td>
         <td style="vertical-align: top">0.01</td>
         <td style="vertical-align: top">DOUBLE<br>FLOAT</td>
         <td style="vertical-align: top">Yes</td>
@@ -39,7 +39,7 @@ approximate:count(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE
     </tr>
     <tr>
         <td style="vertical-align: top">confidence</td>
-        <td style="vertical-align: top; word-wrap: break-word"> This is the level confidence with which the specified relative error can be considered, specified as a rate. Higher value indicates that the possibility of the actual deviation of the count from the accurate count is equal to the relative error specified can be considered with greater certainty. If 1 is specified, it can be considered with certainty that the count is generated with the specified rate of relative error. If 0 is specified, there is no certainty that the count is generated with the specified level of error.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the level confidence with which the specified relative error can be considered, specified as a rate. Higher the value specified, higher is the possibility of the amount of error in the count being no greater than the relative error specified. If 0.99 is specified, it can be almost considered with certainty that the count is generated with the specified rate of relative error. If 0.01 is specified, there can be minimal certainty as to whether the count is generated with the specified rate of error. Note that you cannot specify <code>1</code> or <code>0</code> as the value for this parameter.</td>
         <td style="vertical-align: top">0.99</td>
         <td style="vertical-align: top">DOUBLE<br>FLOAT</td>
         <td style="vertical-align: top">Yes</td>
@@ -60,12 +60,12 @@ approximate:count(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE
     </tr>
     <tr>
         <td style="vertical-align: top">countLowerBound</td>
-        <td style="vertical-align: top; word-wrap: break-word">The lowest value in the range within which the most accurate count for the attribute is included This count rane is based on the latest event.</td>
+        <td style="vertical-align: top; word-wrap: break-word">The lowest value in the range within which the most accurate count for the attribute is included This count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
         <td style="vertical-align: top">countUpperBound</td>
-        <td style="vertical-align: top; word-wrap: break-word">The highest value in the range within which the most accurate count for the attribute is included This count rane is based on the latest event.</td>
+        <td style="vertical-align: top; word-wrap: break-word">The highest value in the range within which the most accurate count for the attribute is included This count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
 </table>
@@ -91,7 +91,7 @@ insert into OutputStream;
 
 ### distinctCount *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
-<p style="word-wrap: break-word">Performs HyperLogLog algorithm on a window of streaming data set based on a specific relative error and a confidence value to calculate the number of distinct events. If used without a window, the out of memory errors will occur. For usage without the window, use the approximate:distinctCountEver extension.</p>
+<p style="word-wrap: break-word">This applies the HyperLogLog algorithm to a Siddhi window. The algorithm is set with a relative error and a confidence value to calculate the number of distinct events with an accepted level of accuracy. Note that if this extension is used without a window, it may cause out of memory errors. If you need to perform these calculations without windows, use the <code>approximate:distinctCountEver</code> extension.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -110,7 +110,7 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
     </tr>
     <tr>
         <td style="vertical-align: top">value</td>
-        <td style="vertical-align: top; word-wrap: break-word">The value used to find distinctCount</td>
+        <td style="vertical-align: top; word-wrap: break-word">The value based on which the <code>distinctCount</code> is calculated.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">INT<br>DOUBLE<br>FLOAT<br>LONG<br>STRING<br>BOOL<br>TIME<br>OBJECT</td>
         <td style="vertical-align: top">No</td>
@@ -118,7 +118,7 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
     </tr>
     <tr>
         <td style="vertical-align: top">relative.error</td>
-        <td style="vertical-align: top; word-wrap: break-word">This is the relative error for which the distinct count is obtained. The values must be in the range of (0, 1).</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the relative error to be allowed for the distinct count generated, expressed as a value between 0 and 1. Lower the value specified, lower is the rate by which the distinct count can deviate from being perfectly correct. If 0.01 is specified, the distinct count generated must be almost perfectly accurate. If 0.99 is specified, the minimal level of accuracy is expected. Note that you cannot specify <code>1</code> or <code>0</code> as the value for this parameter.</td>
         <td style="vertical-align: top">0.01</td>
         <td style="vertical-align: top">DOUBLE<br>FLOAT</td>
         <td style="vertical-align: top">Yes</td>
@@ -126,7 +126,7 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
     </tr>
     <tr>
         <td style="vertical-align: top">confidence</td>
-        <td style="vertical-align: top; word-wrap: break-word">This is the confidence for which the relative error is true. The value must be one out of 0.65, 0.95, 0.99.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This is the level confidence with which the specified relative error can be considered, specified as a rate. Higher the value specified, higher is the possibility of the amount of error in the distinct count being no greater than the relative error specified. If 0.99 is specified, it can be almost considered with certainty that the distinct count is generated with the specified rate of relative error. If 0.01 is specified, there can be minimal certainty as to whether the distinct count is generated with the specified rate of error. The possible values are <code>0.65</code>, <code>0.95</code>, <code>0.99</code>.</td>
         <td style="vertical-align: top">0.95</td>
         <td style="vertical-align: top">DOUBLE<br>FLOAT</td>
         <td style="vertical-align: top">Yes</td>
@@ -142,17 +142,17 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
     </tr>
     <tr>
         <td style="vertical-align: top">distinctCount</td>
-        <td style="vertical-align: top; word-wrap: break-word">Represents the distinct count considering the last event </td>
+        <td style="vertical-align: top; word-wrap: break-word">This represents the distinct count based on the last event </td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
         <td style="vertical-align: top">distinctCountLowerBound</td>
-        <td style="vertical-align: top; word-wrap: break-word">Represents the lower bound of the distinct count considering the last event</td>
+        <td style="vertical-align: top; word-wrap: break-word">The lowest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
         <td style="vertical-align: top">distinctCountUpperBound</td>
-        <td style="vertical-align: top; word-wrap: break-word">Represents the upper bound of the distinct count considering the last event</td>
+        <td style="vertical-align: top; word-wrap: break-word">The highest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
 </table>
@@ -166,7 +166,7 @@ select distinctCount, distinctCountLowerBound, distinctCountUpperBound
 insert into OutputStream;
 
 ```
-<p style="word-wrap: break-word">Distinct count of ip addresses which has sent requests within the last 1000ms is calculated for a default relative error of 0.01 and a default confidence of 0.95. Here the distinct count is the number of different values received for ip attribute considering the events received within last 1000ms time period. The answers are 95% guaranteed to have a +-1% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
+<p style="word-wrap: break-word">This query calculates the distinct count of each IP address that has sent requests within the last 1000 milliseconds. The distinct count is 95% guaranteed to deviate no more than 1% from the actual distinct count per IP address.The output consists of the approximate distinct count, and the lower bound and upper bound of the approximate answer.</p>
 
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
@@ -177,7 +177,7 @@ select distinctCount, distinctCountLowerBound, distinctCountUpperBound
 insert into OutputStream;
 
 ```
-<p style="word-wrap: break-word">Distinct count of sensors which has sent data to the stream out of last 1000 events is calculated for a relative error of 0.05 and a confidence of 0.65. Here the distinct count is the number of different values values received for sensorId attribute in the last 1000 events. The answers are 65% guaranteed to have a +-5% error relative to the distinct count. The output will consist of the approximate distinct count, lower bound and upper bound of the approximate answer.</p>
+<p style="word-wrap: break-word">This query calculates the distinct count of sensors that have sent data to the stream. This value is calculated based on the last 1000 events in a sliding manner. The calculated distinct count is 65% guaranteed to deviate no more than 5% from the actual distinct count. The output consists of the approximate distinct count, and the lower bound and upper bound of the approximate answer.</p>
 
 ### distinctCountEver *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
