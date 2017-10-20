@@ -52,7 +52,7 @@ import java.util.Map;
         description = "This extension applies the `Count-min-sketch` algorithm to a Siddhi window. The algorithm is" +
                 " set based on a specific relative error and a confidence value to calculate the approximate " +
                 "count(frequency) of events. " +
-                "Note that using this extension without a window may return out of memory errors.",
+                "Note that using this extension without a window may cause out of memory.",
         parameters = {
                 @Parameter(
                         name = "value",
