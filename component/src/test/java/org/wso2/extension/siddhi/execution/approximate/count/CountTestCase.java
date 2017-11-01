@@ -89,7 +89,6 @@ public class CountTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-
     @Test
     public void testApproximateCount_2() throws InterruptedException {
         final int windowLength = 1000;
@@ -292,6 +291,175 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
+    @Test
+    public void testApproximateCount_10() throws InterruptedException {
+        final int windowLength = 1000;
+        final double confidence = 0.99;
+        final double relativeError = 0.01;
 
+        LOG.info("Approximate Cardinality Test Case - for Siddhi length window - " +
+                "default relative error(" + relativeError + ") and confidence(" + confidence + ") - int input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number int);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#window.length(" + windowLength + ")#approximate:count(number) " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    totalEventsArrived++;
+
+                    if (totalEventsArrived < windowLength) {
+                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    } else {
+                        exactCount = windowLength / noOfUniqueEvents;
+                    }
+
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+
+                    if (exactCount >= lowerBound && exactCount <= upperBound) {
+                        validEvents++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+        for (int j = 0; j < totalEventsSent; j++) {
+            inputHandler.send(new Object[]{j % noOfUniqueEvents});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        Assert.assertTrue(eventArrived);
+        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testApproximateCount_11() throws InterruptedException {
+        final int windowLength = 1000;
+        final double confidence = 0.99;
+        final double relativeError = 0.01;
+
+        LOG.info("Approximate Cardinality Test Case - for Siddhi length window - " +
+                "default relative error(" + relativeError + ") and confidence(" + confidence + ") - string input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number string);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#window.length(" + windowLength + ")#approximate:count(number) " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    totalEventsArrived++;
+
+                    if (totalEventsArrived < windowLength) {
+                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    } else {
+                        exactCount = windowLength / noOfUniqueEvents;
+                    }
+
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+
+                    if (exactCount >= lowerBound && exactCount <= upperBound) {
+                        validEvents++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+        for (int j = 0; j < totalEventsSent; j++) {
+            inputHandler.send(new Object[]{(j % noOfUniqueEvents) + ""});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        Assert.assertTrue(eventArrived);
+        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testApproximateCount_12() throws InterruptedException {
+        final int windowLength = 1000;
+        final double confidence = 0.99;
+        final double relativeError = 0.01;
+
+        LOG.info("Approximate Cardinality Test Case - for Siddhi length window - " +
+                "default relative error(" + relativeError + ") and confidence(" + confidence + ") - float input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number float);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#window.length(" + windowLength + ")#approximate:count(number) " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    totalEventsArrived++;
+
+                    if (totalEventsArrived < windowLength) {
+                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    } else {
+                        exactCount = windowLength / noOfUniqueEvents;
+                    }
+
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+
+                    if (exactCount >= lowerBound && exactCount <= upperBound) {
+                        validEvents++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+        for (int j = 0; j < totalEventsSent; j++) {
+            inputHandler.send(new Object[]{(float) ((j % noOfUniqueEvents) + 0.001)});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        Assert.assertTrue(eventArrived);
+        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+
+        siddhiAppRuntime.shutdown();
+    }
 }
 

@@ -270,6 +270,67 @@ public class DistinctCountTestCase {
         siddhiAppRuntime.shutdown();
     }
 
+    @Test
+    public void testApproximateCardinality_114() throws InterruptedException {
+        final int windowLength = 500;
+        final double relativeError = 0.01;
+        final double confidence = 0.99;
+
+        LOG.info("Approximate Distinct Count Test Case - for Siddhi length window - " +
+                "specified relative error(" + relativeError + ") and confidence(" + confidence + ")" +
+                " - float input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number float);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#window.length(" + windowLength + ")#approximate:distinctCount(number, "
+                + relativeError + ", " + confidence + ") " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            long cardinality;
+            long exactCardinality;
+            long lowerBound;
+            long upperBound;
+
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    totalCount++;
+                    if (totalCount < windowLength) {
+                        exactCardinality = totalCount;
+                    } else {
+                        exactCardinality = windowLength;
+                    }
+
+                    cardinality = (long) event.getData(1);
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+                    if (exactCardinality >= lowerBound && exactCardinality <= upperBound) {
+                        validCount++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+        for (int j = 0; j < noOfEvents; j++) {
+            inputHandler.send(new Object[]{(float) (j + 0.001)});
+            Thread.sleep(1);
+        }
+        Thread.sleep(100);
+        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertTrue(eventArrived);
+//      confidence check
+        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        siddhiAppRuntime.shutdown();
+    }
 
     @Test
     public void testApproximateCardinality_3() throws InterruptedException {
@@ -332,7 +393,6 @@ public class DistinctCountTestCase {
         Assert.assertTrue((double) validCount / totalCount >= confidence);
         siddhiAppRuntime.shutdown();
     }
-
 
     @Test
     public void testApproximateCardinality_4() throws InterruptedException {

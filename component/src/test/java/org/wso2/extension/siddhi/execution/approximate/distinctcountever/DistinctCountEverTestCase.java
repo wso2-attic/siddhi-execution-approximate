@@ -232,6 +232,58 @@ public class DistinctCountEverTestCase {
     }
 
     @Test
+    public void testApproximateCardinality_114() throws InterruptedException {
+        final float relativeError = 0.001f;
+        final double confidence = 0.99;
+
+        LOG.info("Approximate Distinct Count Ever Test Case - specified relative error(" + relativeError + ") " +
+                "and confidence(" + confidence + ") - float input");
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String inStreamDefinition = "define stream inputStream (number float);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream#approximate:distinctCountEver(number," + relativeError +
+                ", " + confidence + ") " +
+                "select * " +
+                "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("outputStream", new StreamCallback() {
+            long lowerBound;
+            long upperBound;
+
+            @Override
+            public void receive(Event[] events) {
+                for (Event event : events) {
+                    totalCount++;
+                    lowerBound = (long) event.getData(2);
+                    upperBound = (long) event.getData(3);
+                    if (totalCount >= lowerBound && totalCount <= upperBound) {
+                        validCount++;
+                    }
+                }
+                eventArrived = true;
+            }
+        });
+
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+
+        for (int j = 0; j < noOfEvents; j++) {
+            inputHandler.send(new Object[]{(float) (j + 0.002)});
+            Thread.sleep(1);
+        }
+
+        Thread.sleep(100);
+        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertTrue(eventArrived);
+//      confidence check
+        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
     public void testApproximateCardinality_3() throws InterruptedException {
         final double relativeError = 0.05;
         final double confidence = 0.65;
@@ -284,7 +336,6 @@ public class DistinctCountEverTestCase {
         Assert.assertTrue((double) validCount / totalCount >= confidence);
         siddhiAppRuntime.shutdown();
     }
-
 
     @Test
     public void testApproximateCardinality_4() throws InterruptedException {
