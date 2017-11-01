@@ -76,9 +76,8 @@ public class CountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < totalEventsSent; j++) {
-            inputHandler.send(new Object[]{j % noOfUniqueEvents});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalEventsSent; noOfEvents++) {
+            inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
         Thread.sleep(100);
@@ -335,9 +334,8 @@ public class CountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < totalEventsSent; j++) {
-            inputHandler.send(new Object[]{j % noOfUniqueEvents});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalEventsSent; noOfEvents++) {
+            inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
         Thread.sleep(100);
@@ -392,9 +390,8 @@ public class CountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < totalEventsSent; j++) {
-            inputHandler.send(new Object[]{(j % noOfUniqueEvents) + ""});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalEventsSent; noOfEvents++) {
+            inputHandler.send(new Object[]{(noOfEvents % noOfUniqueEvents) + ""});
         }
 
         Thread.sleep(100);
@@ -449,9 +446,8 @@ public class CountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < totalEventsSent; j++) {
-            inputHandler.send(new Object[]{(float) ((j % noOfUniqueEvents) + 0.001)});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalEventsSent; noOfEvents++) {
+            inputHandler.send(new Object[]{(float) ((noOfEvents % noOfUniqueEvents) + 0.001)});
         }
 
         Thread.sleep(100);

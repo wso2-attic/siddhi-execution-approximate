@@ -16,7 +16,7 @@ public class DistinctCountTestCase {
     static final Logger LOG = Logger.getLogger(DistinctCountTestCase.class);
     private volatile int totalCount;
     private volatile int validCount;
-    private final int noOfEvents = 1000;
+    private final int totalNoOfEvents = 1000;
     private volatile boolean eventArrived;
 
     @BeforeMethod
@@ -73,12 +73,11 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{j});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{noOfEvents});
         }
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
@@ -134,12 +133,11 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{j + ""});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{noOfEvents + ""});
         }
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
@@ -196,12 +194,11 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{(double) j});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{(double) noOfEvents});
         }
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
@@ -257,13 +254,12 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{(long) j});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{(long) noOfEvents});
         }
 
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
@@ -320,12 +316,11 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{(float) (j + 0.001)});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{(float) (noOfEvents + 0.001)});
         }
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
@@ -381,13 +376,12 @@ public class DistinctCountTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
 
-        for (int j = 0; j < noOfEvents; j++) {
-            inputHandler.send(new Object[]{j});
-            Thread.sleep(1);
+        for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
+            inputHandler.send(new Object[]{noOfEvents});
         }
 
         Thread.sleep(100);
-        Assert.assertEquals(noOfEvents, totalCount);
+        Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
         Assert.assertTrue((double) validCount / totalCount >= confidence);
