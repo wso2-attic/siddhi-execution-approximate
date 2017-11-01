@@ -1,14 +1,14 @@
-# API Docs - v1.0.3-SNAPSHOT
+# API Docs - v1.0.2
 
 ## Approximate
 
-### distinctCount *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+### distinctCountEver *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
-<p style="word-wrap: break-word">This applies the HyperLogLog algorithm to a Siddhi window. The algorithm is set with a relative error and a confidence value to calculate the number of distinct events with an accepted level of accuracy. Note that if this extension is used without a window, it may cause out of memory errors. If you need to perform these calculations without windows, use the <code>approximate:distinctCountEver</code> extension.</p>
+<p style="word-wrap: break-word">This extension applies the <code>HyperLogLog</code> algorithm set on a specific relative error and a confidence value to a Siddhi window in order toon a streaming data set based on a specific relative error calculate the number of distinct events. Note that this extension returns erroneous values if is is used with a Siddhi window. If you want to perform these calculations with a window, you need to use the <code>approximate:distinctCount</code> extension.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE|FLOAT> relative.error, <DOUBLE|FLOAT> confidence)
+approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE|FLOAT> relative.error, <DOUBLE|FLOAT> confidence)
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -23,7 +23,7 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
     </tr>
     <tr>
         <td style="vertical-align: top">value</td>
-        <td style="vertical-align: top; word-wrap: break-word">The value based on which the <code>distinctCount</code> is calculated.</td>
+        <td style="vertical-align: top; word-wrap: break-word">The value based on which the distinct count is calculated.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">INT<br>DOUBLE<br>FLOAT<br>LONG<br>STRING<br>BOOL<br>TIME<br>OBJECT</td>
         <td style="vertical-align: top">No</td>
@@ -54,17 +54,17 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
         <th>Possible Types</th>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCount</td>
+        <td style="vertical-align: top">distinctCountEver</td>
         <td style="vertical-align: top; word-wrap: break-word">This represents the distinct count based on the last event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCountLowerBound</td>
+        <td style="vertical-align: top">distinctCountEverLowerBound</td>
         <td style="vertical-align: top; word-wrap: break-word">The lowest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCountUpperBound</td>
+        <td style="vertical-align: top">distinctCountEverUpperBound</td>
         <td style="vertical-align: top; word-wrap: break-word">The highest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
@@ -74,8 +74,8 @@ approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value,
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
 define stream requestStream (ip string);
-from requestStream#window.time(1000)#approximate:distinctCount(ip)
-select distinctCount, distinctCountLowerBound, distinctCountUpperBound
+from requestStream#approximate:distinctCountEver(ip)
+select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
 insert into OutputStream;
 
 ```
@@ -84,9 +84,8 @@ insert into OutputStream;
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
 define stream sensorStream (sensorId int);
-from sensorStream#window.length(1000)
-#approximate:distinctCount(sensorId, 0.05, 0.65)
-select distinctCount, distinctCountLowerBound, distinctCountUpperBound
+from sensorStream#approximate:distinctCountEver(sensorId, 0.05, 0.65)
+select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
 insert into OutputStream;
 
 ```
@@ -179,13 +178,13 @@ insert into OutputStream;
 ```
 <p style="word-wrap: break-word">This query generates the count(frequency) of transactions for each user ID based on the last 1000 transactions (i.e., events). The counts generated are 90% guaranteed to deviate from the actual event count within the window by only 5%.The output consists of the approximate count of the latest events, lower bound and upper bound of the approximate answer.</p>
 
-### distinctCountEver *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+### distinctCount *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
-<p style="word-wrap: break-word">This extension applies the <code>HyperLogLog</code> algorithm set on a specific relative error and a confidence value to a Siddhi window in order toon a streaming data set based on a specific relative error calculate the number of distinct events. Note that this extension returns erroneous values if is is used with a Siddhi window. If you want to perform these calculations with a window, you need to use the <code>approximate:distinctCount</code> extension.</p>
+<p style="word-wrap: break-word">This applies the HyperLogLog algorithm to a Siddhi window. The algorithm is set with a relative error and a confidence value to calculate the number of distinct events with an accepted level of accuracy. Note that if this extension is used without a window, it may cause out of memory errors. If you need to perform these calculations without windows, use the <code>approximate:distinctCountEver</code> extension.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE|FLOAT> relative.error, <DOUBLE|FLOAT> confidence)
+approximate:distinctCount(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> value, <DOUBLE|FLOAT> relative.error, <DOUBLE|FLOAT> confidence)
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -200,7 +199,7 @@ approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> va
     </tr>
     <tr>
         <td style="vertical-align: top">value</td>
-        <td style="vertical-align: top; word-wrap: break-word">The value based on which the distinct count is calculated.</td>
+        <td style="vertical-align: top; word-wrap: break-word">The value based on which the <code>distinctCount</code> is calculated.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">INT<br>DOUBLE<br>FLOAT<br>LONG<br>STRING<br>BOOL<br>TIME<br>OBJECT</td>
         <td style="vertical-align: top">No</td>
@@ -231,17 +230,17 @@ approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> va
         <th>Possible Types</th>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCountEver</td>
+        <td style="vertical-align: top">distinctCount</td>
         <td style="vertical-align: top; word-wrap: break-word">This represents the distinct count based on the last event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCountEverLowerBound</td>
+        <td style="vertical-align: top">distinctCountLowerBound</td>
         <td style="vertical-align: top; word-wrap: break-word">The lowest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">distinctCountEverUpperBound</td>
+        <td style="vertical-align: top">distinctCountUpperBound</td>
         <td style="vertical-align: top; word-wrap: break-word">The highest value in the range within which the most accurate distinct count for the attribute is included This distinct count range is based on the latest event.</td>
         <td style="vertical-align: top">LONG</td>
     </tr>
@@ -251,8 +250,8 @@ approximate:distinctCountEver(<INT|DOUBLE|FLOAT|LONG|STRING|BOOL|TIME|OBJECT> va
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
 define stream requestStream (ip string);
-from requestStream#approximate:distinctCountEver(ip)
-select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
+from requestStream#window.time(1000)#approximate:distinctCount(ip)
+select distinctCount, distinctCountLowerBound, distinctCountUpperBound
 insert into OutputStream;
 
 ```
@@ -261,8 +260,9 @@ insert into OutputStream;
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
 define stream sensorStream (sensorId int);
-from sensorStream#approximate:distinctCountEver(sensorId, 0.05, 0.65)
-select distinctCountEver, distinctCountEverLowerBound, distinctCountEverUpperBound
+from sensorStream#window.length(1000)
+#approximate:distinctCount(sensorId, 0.05, 0.65)
+select distinctCount, distinctCountLowerBound, distinctCountUpperBound
 insert into OutputStream;
 
 ```
