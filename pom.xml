@@ -47,11 +47,12 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <siddhi.version>4.0.0-beta16</siddhi.version>
+        <siddhi.version>4.0.3</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <junit.version>4.10</junit.version>
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
+        <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
     <scm>
@@ -73,6 +74,12 @@
                 <groupId>org.wso2.siddhi</groupId>
                 <artifactId>siddhi-query-api</artifactId>
                 <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.log4j.wso2</groupId>

@@ -2,9 +2,11 @@ package org.wso2.extension.siddhi.execution.approximate.count;
 
 
 import org.apache.log4j.Logger;
+import org.awaitility.Duration;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.execution.approximate.Utils;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
@@ -12,8 +14,9 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 
+
 public class CountTestCase {
-    static final Logger LOG = Logger.getLogger(CountTestCase.class);
+    private static final Logger LOG = Logger.getLogger(CountTestCase.class);
     private final int totalEventsSent = 2000;
     private final int noOfUniqueEvents = 100;
 
@@ -80,7 +83,7 @@ public class CountTestCase {
             inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalEventsSent, totalEventsArrived);
         Assert.assertTrue(eventArrived);
         Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
@@ -338,7 +341,7 @@ public class CountTestCase {
             inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalEventsSent, totalEventsArrived);
         Assert.assertTrue(eventArrived);
         Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
@@ -394,7 +397,7 @@ public class CountTestCase {
             inputHandler.send(new Object[]{(noOfEvents % noOfUniqueEvents) + ""});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalEventsSent, totalEventsArrived);
         Assert.assertTrue(eventArrived);
         Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
@@ -450,7 +453,7 @@ public class CountTestCase {
             inputHandler.send(new Object[]{(float) ((noOfEvents % noOfUniqueEvents) + 0.001)});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalEventsSent, totalEventsArrived);
         Assert.assertTrue(eventArrived);
         Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);

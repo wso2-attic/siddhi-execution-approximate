@@ -2,9 +2,11 @@ package org.wso2.extension.siddhi.execution.approximate.distinctcountever;
 
 
 import org.apache.log4j.Logger;
+import org.awaitility.Duration;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.execution.approximate.Utils;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
@@ -67,7 +69,7 @@ public class DistinctCountEverTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{noOfEvents});
         }
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
@@ -117,7 +119,7 @@ public class DistinctCountEverTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{noOfEvents + ""});
         }
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
@@ -168,7 +170,7 @@ public class DistinctCountEverTestCase {
             inputHandler.send(new Object[]{(double) noOfEvents});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
@@ -219,7 +221,7 @@ public class DistinctCountEverTestCase {
             inputHandler.send(new Object[]{(long) noOfEvents});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
@@ -270,7 +272,7 @@ public class DistinctCountEverTestCase {
             inputHandler.send(new Object[]{(float) (noOfEvents + 0.002)});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 //      confidence check
@@ -322,7 +324,7 @@ public class DistinctCountEverTestCase {
             inputHandler.send(new Object[]{noOfEvents});
         }
 
-        Thread.sleep(100);
+        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
         Assert.assertEquals(totalNoOfEvents, totalCount);
         Assert.assertTrue(eventArrived);
 
