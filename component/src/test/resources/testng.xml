@@ -20,11 +20,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Execution-Approximate-Test-Suite">
-    <test name="execution-approximate-tests" enabled="true" preserve-order="true">
+    <test name="execution-approximate-tests" enabled="true" preserve-order="true" parallel="false" thread-count="1">
         <classes>
-            <class name="org.wso2.extension.siddhi.execution.approximate.distinctcount.DistinctCountTestCase"/>
+            <!--<class name="org.wso2.extension.siddhi.execution.approximate.distinctcount.DistinctCountTestCase"/>
             <class name="org.wso2.extension.siddhi.execution.approximate.distinctcountever.DistinctCountEverTestCase"/>
-            <class name="org.wso2.extension.siddhi.execution.approximate.count.CountTestCase"/>
+            <class name="org.wso2.extension.siddhi.execution.approximate.count.CountTestCase"/>-->
         </classes>
     </test>
 </suite>

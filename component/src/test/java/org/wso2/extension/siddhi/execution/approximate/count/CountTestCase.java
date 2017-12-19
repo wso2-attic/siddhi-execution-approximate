@@ -110,7 +110,7 @@ public class CountTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_1"})
     public void testApproximateCount_2() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -136,7 +136,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_2"})
     public void testApproximateCount_3() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -161,7 +161,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_3"})
     public void testApproximateCount_4() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -186,7 +186,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_4"})
     public void testApproximateCount_5() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -211,7 +211,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_5"})
     public void testApproximateCount_6() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -236,7 +236,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_6"})
     public void testApproximateCount_7() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -261,7 +261,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_7"})
     public void testApproximateCount_8() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -286,7 +286,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_8"})
     public void testApproximateCount_9() throws InterruptedException {
         final int windowLength = 1000;
 
@@ -312,7 +312,7 @@ public class CountTestCase {
         Assert.assertEquals(true, exceptionOccurred);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_9"})
     public void testApproximateCount_10() throws InterruptedException {
         final int windowLength = 1000;
         final double confidence = 0.99;
@@ -363,12 +363,13 @@ public class CountTestCase {
         SiddhiTestHelper.waitForEvents(200, totalEventsSent, totalEventsArrived, 60000);
         Assert.assertEquals(totalEventsSent, totalEventsArrived.get());
         Assert.assertTrue(eventArrived);
+        LOG.info("validEvents:" + validEvents + " totalRec:" + totalEventsArrived.get() + " confidence:" + confidence);
         Assert.assertTrue((double) validEvents / totalEventsArrived.get() >= confidence);
 
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_10"})
     public void testApproximateCount_11() throws InterruptedException {
         final int windowLength = 1000;
         final double confidence = 0.99;
@@ -424,7 +425,7 @@ public class CountTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testApproximateCount_11"})
     public void testApproximateCount_12() throws InterruptedException {
         final int windowLength = 1000;
         final double confidence = 0.99;
