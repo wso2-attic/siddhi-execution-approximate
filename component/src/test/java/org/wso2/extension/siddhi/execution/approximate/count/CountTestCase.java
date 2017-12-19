@@ -20,17 +20,18 @@ package org.wso2.extension.siddhi.execution.approximate.count;
 
 
 import org.apache.log4j.Logger;
-import org.awaitility.Duration;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.wso2.extension.siddhi.execution.approximate.Utils;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CountTestCase {
@@ -38,16 +39,16 @@ public class CountTestCase {
     private final int totalEventsSent = 2000;
     private final int noOfUniqueEvents = 100;
 
-    private volatile int totalEventsArrived;
-    private volatile int validEvents;
-    private volatile boolean eventArrived;
+    private AtomicInteger totalEventsArrived;
+    private int validEvents;
+    private boolean eventArrived;
     private long exactCount;
     private long lowerBound;
     private long upperBound;
 
     @BeforeMethod
     public void init() {
-        totalEventsArrived = 0;
+        totalEventsArrived = new AtomicInteger(0);
         validEvents = 0;
         eventArrived = false;
     }
@@ -75,10 +76,10 @@ public class CountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalEventsArrived++;
+                    totalEventsArrived.incrementAndGet();
 
-                    if (totalEventsArrived < windowLength) {
-                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    if (totalEventsArrived.get() < windowLength) {
+                        exactCount = (totalEventsArrived.get() / noOfUniqueEvents) + 1;
                     } else {
                         exactCount = windowLength / noOfUniqueEvents;
                     }
@@ -101,10 +102,10 @@ public class CountTestCase {
             inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
-        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        SiddhiTestHelper.waitForEvents(200, totalEventsSent, totalEventsArrived, 60000);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived.get());
         Assert.assertTrue(eventArrived);
-        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+        Assert.assertTrue((double) validEvents / totalEventsArrived.get() >= confidence);
 
         siddhiAppRuntime.shutdown();
     }
@@ -333,10 +334,10 @@ public class CountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalEventsArrived++;
+                    totalEventsArrived.incrementAndGet();
 
-                    if (totalEventsArrived < windowLength) {
-                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    if (totalEventsArrived.get() < windowLength) {
+                        exactCount = (totalEventsArrived.get() / noOfUniqueEvents) + 1;
                     } else {
                         exactCount = windowLength / noOfUniqueEvents;
                     }
@@ -359,10 +360,10 @@ public class CountTestCase {
             inputHandler.send(new Object[]{noOfEvents % noOfUniqueEvents});
         }
 
-        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        SiddhiTestHelper.waitForEvents(200, totalEventsSent, totalEventsArrived, 60000);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived.get());
         Assert.assertTrue(eventArrived);
-        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+        Assert.assertTrue((double) validEvents / totalEventsArrived.get() >= confidence);
 
         siddhiAppRuntime.shutdown();
     }
@@ -389,10 +390,10 @@ public class CountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalEventsArrived++;
+                    totalEventsArrived.incrementAndGet();
 
-                    if (totalEventsArrived < windowLength) {
-                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    if (totalEventsArrived.get() < windowLength) {
+                        exactCount = (totalEventsArrived.get() / noOfUniqueEvents) + 1;
                     } else {
                         exactCount = windowLength / noOfUniqueEvents;
                     }
@@ -415,10 +416,10 @@ public class CountTestCase {
             inputHandler.send(new Object[]{(noOfEvents % noOfUniqueEvents) + ""});
         }
 
-        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        SiddhiTestHelper.waitForEvents(200, totalEventsSent, totalEventsArrived, 60000);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived.get());
         Assert.assertTrue(eventArrived);
-        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+        Assert.assertTrue((double) validEvents / totalEventsArrived.get() >= confidence);
 
         siddhiAppRuntime.shutdown();
     }
@@ -445,10 +446,10 @@ public class CountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalEventsArrived++;
+                    totalEventsArrived.incrementAndGet();
 
-                    if (totalEventsArrived < windowLength) {
-                        exactCount = (totalEventsArrived / noOfUniqueEvents) + 1;
+                    if (totalEventsArrived.get() < windowLength) {
+                        exactCount = (totalEventsArrived.get() / noOfUniqueEvents) + 1;
                     } else {
                         exactCount = windowLength / noOfUniqueEvents;
                     }
@@ -470,11 +471,10 @@ public class CountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalEventsSent; noOfEvents++) {
             inputHandler.send(new Object[]{(float) ((noOfEvents % noOfUniqueEvents) + 0.001)});
         }
-
-        Utils.waitForVariableCount(totalEventsArrived, totalEventsSent, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalEventsSent, totalEventsArrived);
+        SiddhiTestHelper.waitForEvents(200, totalEventsSent, totalEventsArrived, 60000);
         Assert.assertTrue(eventArrived);
-        Assert.assertTrue((double) validEvents / totalEventsArrived >= confidence);
+        Assert.assertEquals(totalEventsSent, totalEventsArrived.get());
+        Assert.assertTrue((double) validEvents / totalEventsArrived.get() >= confidence);
 
         siddhiAppRuntime.shutdown();
     }
