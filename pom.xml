@@ -52,7 +52,6 @@
         <junit.version>4.10</junit.version>
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
-        <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
     <scm>
@@ -74,12 +73,6 @@
                 <groupId>org.wso2.siddhi</groupId>
                 <artifactId>siddhi-query-api</artifactId>
                 <version>${siddhi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.log4j.wso2</groupId>

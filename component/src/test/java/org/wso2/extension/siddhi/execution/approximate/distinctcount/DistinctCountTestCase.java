@@ -20,28 +20,29 @@ package org.wso2.extension.siddhi.execution.approximate.distinctcount;
 
 
 import org.apache.log4j.Logger;
-import org.awaitility.Duration;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.wso2.extension.siddhi.execution.approximate.Utils;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DistinctCountTestCase {
     static final Logger LOG = Logger.getLogger(DistinctCountTestCase.class);
-    private volatile int totalCount;
-    private volatile int validCount;
+    private AtomicInteger totalCount;
+    private int validCount;
     private final int totalNoOfEvents = 1000;
-    private volatile boolean eventArrived;
+    private boolean eventArrived;
 
     @BeforeMethod
     public void init() {
-        totalCount = 0;
+        totalCount = new AtomicInteger(0);
         validCount = 0;
         eventArrived = false;
     }
@@ -73,9 +74,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -96,11 +97,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{noOfEvents});
         }
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
@@ -133,9 +134,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -156,11 +157,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{noOfEvents + ""});
         }
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
@@ -193,9 +194,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -217,11 +218,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{(double) noOfEvents});
         }
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
@@ -254,9 +255,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -277,12 +278,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{(long) noOfEvents});
         }
-
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
@@ -315,9 +315,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -339,11 +339,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{(float) (noOfEvents + 0.001)});
         }
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
@@ -375,9 +375,9 @@ public class DistinctCountTestCase {
             @Override
             public void receive(Event[] events) {
                 for (Event event : events) {
-                    totalCount++;
-                    if (totalCount < windowLength) {
-                        exactCardinality = totalCount;
+                    totalCount.incrementAndGet();
+                    if (totalCount.get() < windowLength) {
+                        exactCardinality = totalCount.get();
                     } else {
                         exactCardinality = windowLength;
                     }
@@ -399,12 +399,11 @@ public class DistinctCountTestCase {
         for (int noOfEvents = 0; noOfEvents < totalNoOfEvents; noOfEvents++) {
             inputHandler.send(new Object[]{noOfEvents});
         }
-
-        Utils.waitForVariableCount(totalNoOfEvents, totalCount, Duration.FIVE_SECONDS);
-        Assert.assertEquals(totalNoOfEvents, totalCount);
+        SiddhiTestHelper.waitForEvents(200, totalNoOfEvents, totalCount, 60000);
+        Assert.assertEquals(totalNoOfEvents, totalCount.get());
         Assert.assertTrue(eventArrived);
 //      confidence check
-        Assert.assertTrue((double) validCount / totalCount >= confidence);
+        Assert.assertTrue((double) validCount / totalCount.get() >= confidence);
         siddhiAppRuntime.shutdown();
     }
 
