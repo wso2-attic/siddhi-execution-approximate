@@ -20,8 +20,8 @@ package org.wso2.extension.siddhi.execution.approximate.count;
 import org.wso2.extension.siddhi.execution.approximate.distinctcount.MurmurHash;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A probabilistic data structure to keep count of different items.
@@ -74,8 +74,7 @@ public class CountMinSketch<E> implements Serializable {
 //      a,b are chosen independently for each hash function.
         this.hashCoefficientsA = new ArrayList<>(depth);
         this.hashCoefficientsB = new ArrayList<>(depth);
-        SecureRandom random = new SecureRandom();
-        random.setSeed(123);
+        Random random = new Random(123);
         for (int i = 0; i < depth; i++) {
             hashCoefficientsA.add(random.nextInt(Integer.MAX_VALUE));
             hashCoefficientsB.add(random.nextInt(Integer.MAX_VALUE));
@@ -163,6 +162,7 @@ public class CountMinSketch<E> implements Serializable {
     /**
      * Calculate the confidence interval of the approximate count
      * [approximateCount - (totalNoOfItems * relativeError), approximateCount + (totalNoOfItems * relativeError)]
+     *
      * @param count is the approximate count
      * @return a long array which contains the lower bound and
      * the upper bound of the confidence interval consecutively
