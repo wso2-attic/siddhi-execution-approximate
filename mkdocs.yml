@@ -9,13 +9,6 @@ extra_javascript:
 repo_name: Siddhi-Script-JS
 repo_url: https://github.com/wso2-extensions/siddhi-execution-approximate
 copyright: Copyright &copy; 2011 - 2018 WSO2
-theme:
-  name: material
-  logo: images/siddhi-logo-w.svg
-  favicon: images/favicon.ico
-  palette:
-    primary: teal
-    accent: teal
 google_analytics:
 - UA-103065-28
 - auto
@@ -32,6 +25,7 @@ markdown_extensions:
 pages:
 - Welcome: index.md
 - API Docs:
+  - 1.0.19: api/1.0.19.md
   - 1.0.18: api/1.0.18.md
   - 1.0.17: api/1.0.17.md
   - 1.0.16: api/1.0.16.md
