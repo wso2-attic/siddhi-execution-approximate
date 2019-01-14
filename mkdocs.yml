@@ -9,6 +9,13 @@ extra_javascript:
 repo_name: siddhi-execution-approximate
 repo_url: https://github.com/wso2-extensions/siddhi-execution-approximate
 copyright: Copyright &copy; 2011 - 2018 WSO2
+theme:
+  name: 'material'
+  logo: images/siddhi-logo-w.svg
+  favicon: images/favicon.ico
+  palette:
+    primary: teal
+    accent: teal
 google_analytics:
 - UA-103065-28
 - auto
