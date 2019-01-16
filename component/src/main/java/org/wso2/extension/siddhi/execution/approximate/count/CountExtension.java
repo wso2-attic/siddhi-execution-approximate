@@ -49,14 +49,14 @@ import java.util.Map;
 @Extension(
         name = "count",
         namespace = "approximate",
-        description = "This extension applies the `Count-min-sketch` algorithm to a Siddhi window. The algorithm is" +
-                " set based on a specific relative error and a confidence value to calculate the approximate " +
-                "count(frequency) of events. " +
-                "Note that using this extension without a window may cause out of memory.",
+        description = "This extension applies the `count-min sketch` algorithm to a Siddhi window. The algorithm" +
+                " calculates the approximate count i.e., the frequency of events that arrive, based on " +
+                " the given values for the 'relative error' and 'confidence value'." +
+                " Note that, using this extension without a window may cause an 'out of memory' error.",
         parameters = {
                 @Parameter(
                         name = "value",
-                        description = "The value based on which the count is derived.",
+                        description = "The value for which the count is derived.",
                         type = {DataType.INT, DataType.DOUBLE, DataType.FLOAT, DataType.LONG, DataType.STRING,
                                 DataType.BOOL, DataType.TIME, DataType.OBJECT}
                 ),
@@ -65,7 +65,7 @@ import java.util.Map;
                         description = "This is the relative error to be allowed for the count generated, expressed " +
                                 "as a value between 0 and 1. Lower the value specified, lower is the rate by which " +
                                 "the count can deviate from being perfectly correct. If 0.01 is specified, the count " +
-                                "generated must be almost perfectly accurate. If 0.99 is specified, the minimal " +
+                                "generated must be almost perfectly accurate. If 0.99 is specified, minimal " +
                                 "level of accuracy is expected. Note that you cannot specify `1` or `0` as the value " +
                                 "for this parameter.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
@@ -74,10 +74,11 @@ import java.util.Map;
                 ),
                 @Parameter(
                         name = "confidence",
-                        description = "This is the level confidence with which the specified relative error can " +
-                                "be considered, specified as a rate. Higher the value specified, higher is the " +
+                        description = "This value determines the rate by which the result can deviate from " +
+                                "the actual event count. " +
+                                "Higher the value specified, higher is the " +
                                 "possibility of the amount of error in the count being no greater than the relative " +
-                                "error specified. If 0.99 is specified, it can be almost considered with certainty " +
+                                "error specified. If 0.99 is specified, it is almost certain " +
                                 "that the count is generated with the specified rate of relative error. If 0.01 is" +
                                 " specified, there can be minimal certainty as to whether the count is generated " +
                                 "with the specified rate of error. Note that you cannot specify `1` or `0` as the " +
@@ -91,48 +92,47 @@ import java.util.Map;
                 @ReturnAttribute(
                         name = "count",
                         description = "This represents the approximate count per attribute based on the latest " +
-                                "event",
+                                "event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "countLowerBound",
                         description = "The lowest value in the range within which the most accurate count for the " +
-                                "attribute is included This count range is based on the latest event.",
+                                "attribute is included. This count range is based on the latest event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
                         name = "countUpperBound",
                         description = "The highest value in the range within which the most accurate count for the " +
-                                "attribute is included This count range is based on the latest event.",
+                                "attribute is included. This count range is based on the latest event.",
                         type = {DataType.LONG}
                 )
         },
         examples = {
-
                 @Example(
-                        syntax = "define stream requestStream (ip string);\n" +
-                                "from requestStream#window.time(1000)#approximate:count(ip)\n" +
+                        syntax = "define stream RequestStream (ip string);\n" +
+                                "from RequestStream#window.time(1000)#approximate:count(ip)\n" +
                                 "select count, countLowerBound, countUpperBound\n" +
                                 "insert into OutputStream;",
                         description = "This query generates the count(frequency) of requests from different IP " +
-                                "addresses in a time window is calculated with a default relative error of 0.01 " +
+                                "addresses in a time window that is calculated with a default relative error of 0.01 " +
                                 "and a default confidence of 0.99. " +
                                 "Here, only the events that arrive during the last 1000 milliseconds are considered" +
                                 " when calculating the counts. The counts generated are 99% guaranteed to deviate " +
                                 "from the actual count within the window by only 1%. The output consists of the " +
-                                "approximate count of the latest event, lower bound and upper bound of the " +
+                                "approximate count of the latest event, lower bound, and upper bound of the " +
                                 "approximate answer."
                 ),
                 @Example(
-                        syntax = "define stream transactionStream (userId int, amount double);\n" +
-                                "from transactionStream#window.length(1000)#approximate:count(userId, 0.05, 0.9)\n" +
+                        syntax = "define stream TransactionStream (userId int, amount double);\n" +
+                                "from TransactionStream#window.length(1000)#approximate:count(userId, 0.05, 0.9)\n" +
                                 "select count, countLowerBound, countUpperBound\n" +
                                 "insert into OutputStream;",
-                        description = "This query generates the count(frequency) of transactions for each user ID " +
-                                "based on the last 1000 transactions (i.e., events). The counts generated are 90% " +
+                        description = "This query generates the count or frequency of transactions for each user ID " +
+                                "based on the last 1000 transactions, i.e., events. The counts generated are 90% " +
                                 "guaranteed to deviate from the actual event count within the window by only 5%." +
                                 "The output consists of the approximate count of the latest events, " +
-                                "lower bound and upper bound of the approximate answer."
+                                "lower bound and upper bound of the approximate result."
                 )
         }
 )

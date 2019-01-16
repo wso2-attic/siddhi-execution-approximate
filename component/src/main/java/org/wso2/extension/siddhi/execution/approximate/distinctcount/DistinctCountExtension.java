@@ -50,15 +50,15 @@ import java.util.Map;
 @Extension(
         name = "distinctCount",
         namespace = "approximate",
-        description = "This applies the HyperLogLog algorithm to a Siddhi window. The algorithm is set with a " +
-                "relative error and a confidence value to calculate the number of distinct events with an accepted " +
-                "level of accuracy. Note that if this extension is used without a window, it may cause out of memory" +
-                " errors. If you need to perform these calculations without windows, use the " +
-                "`approximate:distinctCountEver` extension.",
+        description = "This applies the 'HyperLogLog' algorithm to a Siddhi window. The algorithm is set with a " +
+                "relative error and a confidence value on the basis of which the number of distinct " +
+                "events with an accepted level of accuracy is calculated. Note that if this extension is" +
+                " used without a window, it may cause an 'out of memory' error. If you need to perform these " +
+                "calculations without windows, use the `approximate:distinctCountEver` extension.",
         parameters = {
                 @Parameter(
                         name = "value",
-                        description = "The value based on which the `distinctCount` is calculated.",
+                        description = "The value for which the `distinctCount` is calculated.",
                         type = {DataType.INT, DataType.DOUBLE, DataType.FLOAT, DataType.LONG, DataType.STRING,
                                 DataType.BOOL, DataType.TIME, DataType.OBJECT}
                 ),
@@ -68,7 +68,7 @@ import java.util.Map;
                                 "expressed as a value between 0 and 1. Lower the value specified, lower is the " +
                                 "rate by which the distinct count can deviate from being perfectly correct. If 0.01" +
                                 " is specified, the distinct count generated must be almost perfectly accurate. If " +
-                                "0.99 is specified, the minimal level of accuracy is expected. Note that you cannot " +
+                                "0.99 is specified, a minimal level of accuracy is expected. Note that you cannot " +
                                 "specify `1` or `0` as the value for this parameter.",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
@@ -76,14 +76,14 @@ import java.util.Map;
                 ),
                 @Parameter(
                         name = "confidence",
-                        description =  "This is the level confidence with which the specified relative error can " +
-                                "be considered, specified as a rate. Higher the value specified, higher is the " +
+                        description = "The confidence value determines the degree of guarantee with which the " +
+                                "relative error given can be treated. Higher the value specified, higher is the " +
                                 "possibility of the amount of error in the distinct count being no greater than " +
                                 "the relative error specified. If 0.99 is specified, it can be almost considered " +
                                 "with certainty that the distinct count is generated with the specified rate of " +
                                 "relative error. If 0.01 is specified, there can be minimal certainty as to whether" +
                                 " the distinct count is generated with the specified rate of error. The possible " +
-                                "values are `0.65`, `0.95`, `0.99`.",
+                                "values include `0.65`, `0.95`, `0.99`, etc..",
                         type = {DataType.DOUBLE, DataType.FLOAT},
                         optional = true,
                         defaultValue = "0.95"
@@ -98,7 +98,8 @@ import java.util.Map;
                 @ReturnAttribute(
                         name = "distinctCountLowerBound",
                         description = "The lowest value in the range within which the most accurate distinct count " +
-                                "for the attribute is included This distinct count range is based on the latest event.",
+                                "for the attribute is included. " +
+                                "This distinct count range is based on the latest event.",
                         type = {DataType.LONG}
                 ),
                 @ReturnAttribute(
@@ -110,19 +111,19 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define stream requestStream (ip string);\n" +
-                                "from requestStream#window.time(1000)#approximate:distinctCount(ip)\n" +
+                        syntax = "define stream RequestStream (ip string);\n" +
+                                "from RequestStream#window.time(1000)#approximate:distinctCount(ip)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
                         description = "This query calculates the distinct count of events for each IP address that " +
                                 "has sent requests within the last 1000 milliseconds. The distinct count is 95% " +
                                 "guaranteed to deviate no more than 1% from the actual distinct count per IP address." +
-                                "The output consists of the approximate distinct count, and the lower bound and " +
-                                "upper bound of the approximate answer."
+                                "The output consists of the approximate distinct count,the lower bound, and " +
+                                "the upper bound of the approximate answer."
                 ),
                 @Example(
-                        syntax = "define stream sensorStream (sensorId int);\n" +
-                                "from sensorStream#window.length(1000)\n" +
+                        syntax = "define stream SensorStream (sensorId int);\n" +
+                                "from SensorStream#window.length(1000)\n" +
                                 "#approximate:distinctCount(sensorId, 0.05, 0.65)\n" +
                                 "select distinctCount, distinctCountLowerBound, distinctCountUpperBound\n" +
                                 "insert into OutputStream;\n",
