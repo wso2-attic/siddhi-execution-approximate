@@ -18,25 +18,30 @@
 
 package org.wso2.extension.siddhi.execution.approximate.distinctcount;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.event.ComplexEventChunk;
-import org.wso2.siddhi.core.event.stream.StreamEvent;
-import org.wso2.siddhi.core.event.stream.StreamEventCloner;
-import org.wso2.siddhi.core.event.stream.populater.ComplexEventPopulater;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.VariableExpressionExecutor;
-import org.wso2.siddhi.core.query.processor.Processor;
-import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.AbstractDefinition;
-import org.wso2.siddhi.query.api.definition.Attribute;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.event.ComplexEventChunk;
+import io.siddhi.core.event.stream.MetaStreamEvent;
+import io.siddhi.core.event.stream.StreamEvent;
+import io.siddhi.core.event.stream.StreamEventCloner;
+import io.siddhi.core.event.stream.holder.StreamEventClonerHolder;
+import io.siddhi.core.event.stream.populater.ComplexEventPopulater;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.VariableExpressionExecutor;
+import io.siddhi.core.query.processor.ProcessingMode;
+import io.siddhi.core.query.processor.Processor;
+import io.siddhi.core.query.processor.stream.StreamProcessor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.AbstractDefinition;
+import io.siddhi.query.api.definition.Attribute;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,15 +141,18 @@ import java.util.Map;
                 )
         }
 )
-public class DistinctCountExtension extends StreamProcessor {
-    private HyperLogLog<Object> hyperLogLog;
+public class DistinctCountExtension extends StreamProcessor<DistinctCountExtension.ExtensionState> {
     private ExpressionExecutor valueExecutor;
+    private List<Attribute> attributeList = new ArrayList<>(3);
+
 
     @Override
-    protected List<Attribute> init(AbstractDefinition inputDefinition,
-                                   ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
-                                   SiddhiAppContext siddhiAppContext) {
-
+    protected StateFactory<ExtensionState> init(MetaStreamEvent metaStreamEvent, AbstractDefinition inputDefinition,
+                                                ExpressionExecutor[] attributeExpressionExecutors,
+                                                ConfigReader configReader,
+                                                StreamEventClonerHolder streamEventClonerHolder,
+                                                boolean outputExpectsExpiredEvents, boolean findToBeExecuted,
+                                                SiddhiQueryContext siddhiQueryContext) {
 //      default values for relative error and confidence
         final double defaultRelativeError = 0.01;
         final double defaultConfidence = 0.95;
@@ -215,18 +223,19 @@ public class DistinctCountExtension extends StreamProcessor {
             }
         }
 
-        hyperLogLog = new HyperLogLog<>(relativeError, confidence, true);
+        HyperLogLog<Object> hyperLogLog = new HyperLogLog<>(relativeError, confidence, true);
 
-        List<Attribute> attributeList = new ArrayList<>(3);
         attributeList.add(new Attribute("distinctCount", Attribute.Type.LONG));
         attributeList.add(new Attribute("distinctCountLowerBound", Attribute.Type.LONG));
         attributeList.add(new Attribute("distinctCountUpperBound", Attribute.Type.LONG));
-        return attributeList;
+        return () -> new ExtensionState(hyperLogLog);
+
     }
 
     @Override
-    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor processor,
-                           StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
+    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
+                           StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater,
+                           ExtensionState state) {
         synchronized (this) {
             while (streamEventChunk.hasNext()) {
                 StreamEvent streamEvent = streamEventChunk.next();
@@ -235,15 +244,16 @@ public class DistinctCountExtension extends StreamProcessor {
                     streamEventChunk.remove();
                 } else {
                     if (streamEvent.getType().equals(StreamEvent.Type.CURRENT)) {
-                        hyperLogLog.addItem(newData);
+                        state.hyperLogLog.addItem(newData);
                     } else if (streamEvent.getType().equals(StreamEvent.Type.EXPIRED)) {
-                        hyperLogLog.removeItem(newData);
+                        state.hyperLogLog.removeItem(newData);
                     } else if (streamEvent.getType().equals(StreamEvent.Type.RESET)) {
-                        hyperLogLog.clear();
+                        state.hyperLogLog.clear();
                     }
 
-                    Object[] outputData = {hyperLogLog.getCardinality(), hyperLogLog.getConfidenceInterval()[0],
-                            hyperLogLog.getConfidenceInterval()[1]};
+                    Object[] outputData = {state.hyperLogLog.getCardinality(),
+                            state.hyperLogLog.getConfidenceInterval()[0],
+                            state.hyperLogLog.getConfidenceInterval()[1]};
 
                     complexEventPopulater.populateComplexEvent(streamEvent, outputData);
                 }
@@ -259,18 +269,41 @@ public class DistinctCountExtension extends StreamProcessor {
     public void stop() {}
 
     @Override
-    public Map<String, Object> currentState() {
-        synchronized (this) {
-            Map<String, Object> map = new HashMap();
-            map.put("hyperLogLog", hyperLogLog);
-            return map;
-        }
+    public List<Attribute> getReturnAttributes() {
+        return attributeList;
     }
 
     @Override
-    public void restoreState(Map<String, Object> map) {
-        synchronized (this) {
-            hyperLogLog = (HyperLogLog) map.get("hyperLogLog");
+    public ProcessingMode getProcessingMode() {
+        return ProcessingMode.BATCH;
+    }
+
+    class ExtensionState extends State {
+        private HyperLogLog<Object> hyperLogLog;
+
+        private ExtensionState(HyperLogLog<Object> hyperLogLog) {
+            this.hyperLogLog = hyperLogLog;
+        }
+
+        @Override
+        public boolean canDestroy() {
+            return false;
+        }
+
+        @Override
+        public Map<String, Object> snapshot() {
+            synchronized (DistinctCountExtension.this) {
+                Map<String, Object> map = new HashMap();
+                map.put("hyperLogLog", hyperLogLog);
+                return map;
+            }
+        }
+
+        @Override
+        public void restore(Map<String, Object> state) {
+            synchronized (DistinctCountExtension.this) {
+                hyperLogLog = (HyperLogLog) state.get("hyperLogLog");
+            }
         }
     }
 }
