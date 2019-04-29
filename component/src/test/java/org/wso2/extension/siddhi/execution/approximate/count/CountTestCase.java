@@ -18,18 +18,17 @@
 
 package org.wso2.extension.siddhi.execution.approximate.count;
 
-
+import io.siddhi.core.SiddhiAppRuntime;
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.core.event.Event;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.stream.input.InputHandler;
+import io.siddhi.core.stream.output.StreamCallback;
+import io.siddhi.core.util.SiddhiTestHelper;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.wso2.siddhi.core.SiddhiAppRuntime;
-import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.stream.input.InputHandler;
-import org.wso2.siddhi.core.stream.output.StreamCallback;
-import org.wso2.siddhi.core.util.SiddhiTestHelper;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -159,7 +158,7 @@ public class CountTestCase {
             Assert.assertTrue(e instanceof SiddhiAppCreationException);
             Assert.assertTrue(e.getCause().getMessage().contains("The 2nd parameter inside count function" +
                     " - 'relative.error' has to be a constant but found " +
-                    "org.wso2.siddhi.core.executor.VariableExpressionExecutor"));
+                    "io.siddhi.core.executor.VariableExpressionExecutor"));
         }
         Assert.assertEquals(true, exceptionOccurred);
     }
@@ -234,7 +233,7 @@ public class CountTestCase {
             Assert.assertTrue(e instanceof SiddhiAppCreationException);
             Assert.assertTrue(e.getCause().getMessage().contains("The 3rd parameter inside count function" +
                     " - 'confidence' has to be a constant but found " +
-                    "org.wso2.siddhi.core.executor.VariableExpressionExecutor"));
+                    "io.siddhi.core.executor.VariableExpressionExecutor"));
         }
         Assert.assertEquals(true, exceptionOccurred);
     }
@@ -310,7 +309,7 @@ public class CountTestCase {
             Assert.assertTrue(e instanceof SiddhiAppCreationException);
             Assert.assertTrue(e.getCause().getMessage().contains("The 1st parameter inside count function - " +
                     "'value' has to be a variable but found" +
-                    " org.wso2.siddhi.core.executor.ConstantExpressionExecutor"));
+                    " io.siddhi.core.executor.ConstantExpressionExecutor"));
         }
         Assert.assertEquals(true, exceptionOccurred);
     }
